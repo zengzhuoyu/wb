@@ -7,6 +7,9 @@
  * @author   Taylor Otwell <taylorotwell@gmail.com>
  */
 
+//开启原生session
+session_start();
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader

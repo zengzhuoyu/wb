@@ -12,11 +12,11 @@
 			
 			<div class="col-md-6 pull-right text-left">
 				已有账号?
-				<a href="" class="btn">登录</a>
+				<a href="{{url('login')}}" class="btn">登录</a>
 			</div>
 		</div>
 
-		<form action="" method="">
+		<form action="" method="" name="register">
 
 			<div class="row">
 				
@@ -25,7 +25,7 @@
 				</div>
 
 				<div class="col-md-6 text-left">
-					<input type="text">
+					<input type="text" name="account" id="account">
 				</div>			
 			</div>
 
@@ -36,7 +36,7 @@
 				</div>
 
 				<div class="col-md-6 text-left">
-					<input type="text">
+					<input type="password" name="pwd">
 				</div>			
 			</div>			
 
@@ -47,7 +47,7 @@
 				</div>
 
 				<div class="col-md-6 text-left">
-					<input type="text">
+					<input type="password" name="pwded">
 				</div>			
 			</div>	
 
@@ -58,7 +58,7 @@
 				</div>
 
 				<div class="col-md-6 text-left">
-					<input type="text">
+					<input type="text" name="uname" id="uname">
 				</div>			
 			</div>	
 
@@ -69,8 +69,8 @@
 				</div>
 
 				<div class="col-md-6 text-left">
-					<input type="text" size="6">
-					<img src="{:U('verify')}" width='80'>					
+					<input type="text" size="3" name="verify" maxlength="4" id='verify'>
+					<img src="{{url('getVerify')}}" id='verify-img'>					
 				</div>			
 			</div>	
 

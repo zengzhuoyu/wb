@@ -12,7 +12,7 @@
 			
 			<div class="col-md-6 pull-right text-left">
 				还没有账号?
-				<a href="" class="btn">立即注册</a>
+				<a href="{{url('register')}}" class="btn">立即注册</a>
 			</div>
 		</div>
 
