@@ -36,7 +36,7 @@
 				</div>
 
 				<div class="col-md-6 text-left">
-					<input type="password" name="pwd">
+					<input type="password" name="pwd" id="pwd">
 				</div>			
 			</div>			
 
