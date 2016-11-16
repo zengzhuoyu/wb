@@ -14,7 +14,8 @@
 		var checkVerify = "{{url('checkVerify')}}";
 		var token = "{{csrf_token()}}";
 	</script>	
-	<script src="{{asset('bootstrap/js/my.js')}}"></script>
+	<script src="{{asset('bootstrap/js/register.js')}}"></script>
+	<script src="{{asset('bootstrap/js/login.js')}}"></script>
 </head>
 <body>
 	@yield('content')

@@ -16,8 +16,8 @@
 			</div>
 		</div>
 
-		<form action="" method="">
-		
+		<form action="{{url('runLogin')}}" method="post" name="login">
+		{{csrf_field()}}		
 			<div class="row">
 				
 				<div class="col-md-6 text-right">
@@ -25,7 +25,7 @@
 				</div>
 
 				<div class="col-md-6 text-left">
-					<input type="text">
+					<input type="text" name="account">
 				</div>			
 			</div>
 
@@ -36,7 +36,7 @@
 				</div>
 
 				<div class="col-md-6 text-left">
-					<input type="text">
+					<input type="password" name="pwd">
 				</div>			
 			</div>		
 

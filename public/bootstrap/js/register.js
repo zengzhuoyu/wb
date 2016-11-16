@@ -43,7 +43,7 @@ $(function(){
 				required : true,
 				user : true
 			},
-			pwded : {
+			password_confirmation : {
 				required : true,
 				equalTo : "#pwd"
 			},
@@ -85,7 +85,7 @@ $(function(){
 			pwd : {
 				required : '密码不能为空'
 			},
-			pwded : {
+			password_confirmation : {
 				required : '请确认密码',
 				equalTo : '两次密码不一致'
 			},

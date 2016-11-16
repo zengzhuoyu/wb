@@ -15,9 +15,25 @@
 				<a href="{{url('login')}}" class="btn">登录</a>
 			</div>
 		</div>
+		
+	            @if(count($errors)>0)
+			<div class="row text-center">
+				<div class="col-md-6 pull-right text-left">
+			                    @if(is_object($errors))
+			                        <!-- withErrors -->
+			                        @foreach($errors->all() as $error)
+			                            <span class="error">{{$error}}</span>
+			                        @endforeach
+			                    @else
+			                        <!-- 密码修改成功 + 原密码错误 -->                
+			                        <span class="error">{{$errors}}</span>
+			                    @endif
+				</div>
+			</div>		                    
+	            @endif  		
 
-		<form action="" method="" name="register">
-
+		<form action="{{url('runRegis')}}" method="post" name="register">
+			{{csrf_field()}}
 			<div class="row">
 				
 				<div class="col-md-6 text-right">
@@ -47,7 +63,7 @@
 				</div>
 
 				<div class="col-md-6 text-left">
-					<input type="password" name="pwded">
+					<input type="password" name="password_confirmation">
 				</div>			
 			</div>	
 
