@@ -16,6 +16,22 @@
 			</div>
 		</div>
 
+	            @if(count($errors)>0)
+			<div class="row text-center">
+				<div class="col-md-6 pull-right text-left">
+			                    @if(is_object($errors))
+			                        <!-- withErrors -->
+			                        @foreach($errors->all() as $error)
+			                            <span class="error">{{$error}}</span>
+			                        @endforeach
+			                    @else
+			                        <!-- 密码修改成功 + 原密码错误 -->                
+			                        <span class="error">{{$errors}}</span>
+			                    @endif
+				</div>
+			</div>		                    
+	            @endif  
+
 		<form action="{{url('runLogin')}}" method="post" name="login">
 		{{csrf_field()}}		
 			<div class="row">
@@ -43,7 +59,8 @@
 			<div class="row text-center">
 				
 				<div class="col-md-6 pull-right text-left">
-					<input type="checkbox" checked="checked"> &nbsp;下次自动登录
+					<input type="checkbox" checked="checked" name="auto" id="auto">
+					<label for="auto">7天内自动登录</label>
 				</div>		
 			</div>		
 

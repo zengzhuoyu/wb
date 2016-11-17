@@ -11,10 +11,7 @@ $(function () {
 	}, " ");
 
 	$('form[name=login]').validate({
-		errorElement : 'span',
-		success : function (label) {
-			label.addClass('success');
-		},
+
 		rules : {
 			account : {
 				required : true,

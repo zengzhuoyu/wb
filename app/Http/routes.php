@@ -22,6 +22,25 @@ function p($arr){
 }
 
 /**
+ * 异位或加密字符串
+ * @param  [String]  $value [需要加密的字符串]
+ * @param  [integer] $type  [加密解密（0：加密，1：解密）]
+ * @return [String]         [加密或解密后的字符串]
+ */
+function encryption ($value, $type = 0) {
+
+	$key = md5(Config::get('config.ENCTYPTION_KEY'));
+
+	if (!$type) {//加密
+		return str_replace('=', '', base64_encode($value ^ $key));
+	}
+
+	//解密
+	$value = base64_decode($value);
+	return $value ^ $key;
+}	
+
+/**
  * 前台
  */
 
@@ -37,6 +56,10 @@ Route::post('/checkVerify', 'Home\LoginController@checkVerify');//注册时异�
 
 Route::post('/runRegis', 'Home\LoginController@runRegis');//注册表单提交处理
 
-Route::get('/', 'Home\IndexController@index');//前台首页
-
 Route::post('/runLogin', 'Home\LoginController@runLogin');//登录表单提交处理
+
+Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
+
+	Route::get('/', 'IndexController@index');//前台首页
+
+});

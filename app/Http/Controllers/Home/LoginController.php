@@ -14,6 +14,7 @@ use App\Http\Models\Userinfo;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Config;
 
 class LoginController extends Controller
 {
@@ -27,7 +28,67 @@ class LoginController extends Controller
 	public function runLogin(Request $request){
 
 		$account = $request->input('account');
-				
+		$pwd = $request->input('pwd');
+		$auto = $request->input('auto');
+
+		//组合验证数据
+		$data = array(
+
+			'account' => $account,
+			'password' => $pwd
+		);
+
+		$rules = [
+
+			'account'=>'required|alpha_dash|between:5,17',
+			'password'=>'required|alpha_dash|between:5,17',
+		];
+
+		$message = [
+
+			'account.required'=>'账号不能为空',
+			'account.alpha_dash'=>'账号必须以字母开头,且由字母、数字、下划线组成',
+			'account.between'=>'账号在5-17位之间',
+			'password.required'=>'密码不能为空',
+			'password.alpha_dash'=>'密码必须以字母开头,且由字母、数字、下划线组成',
+			'password.between'=>'密码在5-17位之间'	
+		];
+
+		$validator = Validator::make($data,$rules,$message);
+		
+		if(!$validator->passes()){
+
+		    return back()->withErrors($validator);		    
+		}	
+
+    		$user = User::where('account',$account)->select('password', 'lock','id')->first();
+
+    		if(!$user || Crypt::decrypt($user -> password) != $pwd){
+    			return back() -> with('errors','账号或者密码错误');    			
+    		}
+
+    		if($user -> lock){
+    			return back() -> with('errors','该账号被锁定');      			
+    		}
+			
+		//处理下一次自动登录
+		if (isset($auto)) {
+
+			$ip = $request->getClientIp();
+			$value = $account . '|' . $ip;
+			$value = encryption($value);
+
+			// Cookie::queue('auto', $value, Config::get('config.AUTO_LOGIN_TIME')); X
+			setcookie("auto", $value, Config::get('config.AUTO_LOGIN_TIME'));
+
+		}
+
+            	//插入数据成功后把用户ID写SESSION
+    		// session(['uid' => $user -> id]); X
+    		$_SESSION['uid'] = $user -> id;
+
+            	//跳转至首页
+    		return redirect('/');			
 	}
 
 	//注册
@@ -71,10 +132,10 @@ class LoginController extends Controller
 
 		$message = [
 
-			'account.required'=>'用户名不能为空',
-			'account.alpha_dash'=>'用户名必须以字母开头,且由字母、数字、下划线组成',
-			'account.between'=>'用户名在5-17位之间',
-			'account.unique'=>'用户名已存在',
+			'account.required'=>'账号不能为空',
+			'account.alpha_dash'=>'账号必须以字母开头,且由字母、数字、下划线组成',
+			'account.between'=>'账号在5-17位之间',
+			'account.unique'=>'账号已存在',
 			'password.required'=>'密码不能为空',
 			'password.alpha_dash'=>'密码必须以字母开头,且由字母、数字、下划线组成',
 			'password.between'=>'密码在5-17位之间',			
@@ -117,7 +178,7 @@ class LoginController extends Controller
             	}
 
             	//插入数据成功后把用户ID写SESSION
-    		session(['uid' => $user_id]);
+    		$_SESSION['uid'] = $user_id;
 
             	//跳转至首页
     		return redirect('/');            	

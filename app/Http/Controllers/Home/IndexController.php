@@ -11,6 +11,6 @@ class IndexController extends Controller
 {
     public function index(){
 
-    	// p(session('uid'));
+    	p(session('uid'));
     }
 }
