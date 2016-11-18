@@ -1,4 +1,4 @@
-@extends('layouts.home')
+@extends('layouts.loginregis')
 
 @section('title')
 	<title>登 录</title>

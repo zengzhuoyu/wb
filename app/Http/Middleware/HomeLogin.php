@@ -41,6 +41,7 @@ class HomeLogin
             //而自动登录：是在没有登录注册的前提下不被允许的控制器时，如果有点选自动登录，就不会被拦截跳转至登录页
             return redirect('/login');
         }        
+        
         return $next($request);
     }
 }

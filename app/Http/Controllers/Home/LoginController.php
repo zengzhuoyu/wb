@@ -79,7 +79,7 @@ class LoginController extends Controller
 			$value = encryption($value);
 
 			// Cookie::queue('auto', $value, Config::get('config.AUTO_LOGIN_TIME')); X
-			setcookie("auto", $value, Config::get('config.AUTO_LOGIN_TIME'));
+			@setcookie("auto", $value, Config::get('config.AUTO_LOGIN_TIME'));
 
 		}
 

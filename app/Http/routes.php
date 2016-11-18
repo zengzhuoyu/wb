@@ -62,4 +62,6 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 
 	Route::get('/', 'IndexController@index');//前台首页
 
+	Route::get('/quit', 'IndexController@quit');//退出
+
 });
