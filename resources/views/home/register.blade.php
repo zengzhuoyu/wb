@@ -16,17 +16,17 @@
 			</div>
 		</div>
 		
-	            @if(count($errors)>0)
+	            @if($errors)
 			<div class="row text-center">
 				<div class="col-md-6 pull-right text-left">
 			                    @if(is_object($errors))
 			                        <!-- withErrors -->
 			                        @foreach($errors->all() as $error)
-			                            <span class="error">{{$error}}</span>
+			                            <span class="err">{{$error}}</span>
 			                        @endforeach
 			                    @else
 			                        <!-- 密码修改成功 + 原密码错误 -->                
-			                        <span class="error">{{$errors}}</span>
+			                        <span class="err">{{$errors}}</span>
 			                    @endif
 				</div>
 			</div>		                    

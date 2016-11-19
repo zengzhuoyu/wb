@@ -64,4 +64,7 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 
 	Route::get('/quit', 'IndexController@quit');//退出
 
+	Route::get('/userSet', 'UserController@index');//个人设置页面
+
+	Route::post('/editBasic', 'UserController@editBasic');//个人设置：基本信息修改表单提交处理
 });
