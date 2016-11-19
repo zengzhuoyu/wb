@@ -26,7 +26,7 @@ class UserController extends Controller
 	/**
 	 * 修改用户基本信息
 	 */
-	Public function editBasic (Request $request) {
+	Public function editBasic(Request $request){
 
 		$nickname = $request->input('nickname');		
 		$truename = $request->input('truename');		

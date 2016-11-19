@@ -67,4 +67,6 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 	Route::get('/userSet', 'UserController@index');//个人设置页面
 
 	Route::post('/editBasic', 'UserController@editBasic');//个人设置：基本信息修改表单提交处理
+
+	Route::post('/uploadFace', 'CommonController@upload');//个人设置：头像上传
 });

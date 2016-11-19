@@ -161,11 +161,77 @@
 
                </div>
                <div class="tab-pane fade" id="headportrait" style="padding:30px">
-                  <p>iOS is a mobile operating system developed and distributed by Apple 
-                     Inc. Originally released in 2007 for the iPhone, iPod Touch, and 
-                     Apple TV. iOS is derived from OS X, with which it shares the 
-                     Darwin foundation. iOS is Apple's mobile version of the 
-                     OS X operating system used on Apple computers.</p>
+                    <form method="post" action="{{url('editFace')}}">
+                    {{csrf_field()}}
+
+                    @if($errors)
+                      <div class="row">
+                        <div class="form-group col-lg-3">
+                        </div>                      
+                        <div class="form-group col-lg-3">
+                                          @if(is_object($errors))
+                                              <!-- withErrors -->
+                                              @foreach($errors->all() as $error)
+                                                  <span class="err">{{$error}}</span>
+                                              @endforeach
+                                          @else
+                                              <!-- 密码修改成功 + 原密码错误 -->                
+                                              <span class="err">{{$errors}}</span>
+                                          @endif
+                        </div>
+                      </div>                        
+                    @endif
+
+                    <div class="row">
+                      <div class="form-group col-lg-11 text-center">
+                        <img src="{{asset('bootstrap/img/noface.gif')}}" alt="" width='180' height='180' id='face-img'>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-lg-4">                      
+                      </div>                    
+                      <div class="form-group col-lg-2">
+                        <input id="file_upload" name="file_upload" type="file" multiple="true">         
+                        <script type="text/javascript">
+                            <?php $timestamp = time();?>
+                            $(function() {
+                                $('#file_upload').uploadify({
+                                    'buttonText' : '头像上传',
+                                    'formData'     : {
+                                        'type' : 'Face',
+                                        'timestamp' : '<?php echo $timestamp;?>',
+                                        '_token'     : "{{csrf_token()}}"
+                                    },
+                                    'swf'      : "{{asset('org/uploadify/uploadify.swf')}}",
+                                    'uploader' : "{{url('/uploadFace')}}",
+                                    'onUploadSuccess' : function(file, data, response) {
+                                      $('#face-img').attr('src', data);
+                                      // $('input[name=face180]').val(data.path.max);
+                                      // $('input[name=face80]').val(data.path.medium);
+                                      // $('input[name=face50]').val(data.path.mini);                                    
+                                    }
+                                });
+                            });
+                        </script>      
+                        <style>
+                            .uploadify{display:inline-block;}
+                            .uploadify-button{border:none; border-radius:5px; margin-top:8px;margin-left:35px;}
+                            table.add_tab tr td span.uploadify-button-text{color: #FFF; margin:0;}
+                        </style>                                                         
+                        <input type="hidden" name='face180' value=''/>
+                        <input type="hidden" name='face80' value=''/>
+                        <input type="hidden" name='face50' value=''/>                        
+                      </div>
+                    </div>
+
+                    <div class="row">              
+                      <div class="form-group col-lg-11 text-center">                        
+                        <button class="btn btn-primary">保存修改</button>
+                      </div>                          
+                    </div>
+
+                    </form>
                </div>
                <div class="tab-pane fade" id="pass" style="padding:30px">
                   <p>iOS is a mobile operating system developed and distributed by Apple 
