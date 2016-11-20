@@ -19,7 +19,7 @@ class CommonController extends Controller
 	    $entension = $file -> getClientOriginalExtension(); //获取上传文件的后缀
 	    $newName = date('Ymd') . mt_rand(100,999) . '.' . $entension;
 	    $path = 'uploads/'. $type . '/' . date('Y_d') . '/'; 
-	    $file -> move($path,$newName);
+	    $result = $file -> move($path,$newName);
 	    $filepath = $path . $newName;
 	    return $filepath;
 	}

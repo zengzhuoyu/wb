@@ -56,4 +56,40 @@ class UserController extends Controller
     		return back() -> with('errors','修改成功');			
 				
 	}	
+
+	/**
+	 * 修改用户头像
+	 */
+	Public function editFace(Request $request){
+
+		$face50 = $request->input('face50');		
+		$face80 = $request->input('face80');		
+		$face180 = $request->input('face180');	
+
+		$uid = $_SESSION['uid'];
+
+		$data = array(
+			'face50' => $face50,
+			'face80' => $face80,
+			'face180' => $face180
+		);
+
+    		$oldFace = Userinfo::where('uid',$uid)->select('face50', 'face80','face180')->first();
+
+	           $result = Userinfo::where('uid',$uid) -> update($data);			
+
+		if(!$result){
+    			return back() -> with('errors','修改失败,请稍后重试');			
+		}
+    		
+    		if($oldFace -> face180){
+			@unlink($oldFace -> face50);    		
+			@unlink($oldFace -> face80);    		
+			@unlink($oldFace -> face180);      			
+    		}
+  		
+
+    		return back() -> with('errors','修改成功');
+
+	}	
 }

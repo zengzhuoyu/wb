@@ -166,7 +166,7 @@
 
                     @if($errors)
                       <div class="row">
-                        <div class="form-group col-lg-3">
+                        <div class="form-group col-lg-4">
                         </div>                      
                         <div class="form-group col-lg-3">
                                           @if(is_object($errors))
@@ -184,7 +184,13 @@
 
                     <div class="row">
                       <div class="form-group col-lg-11 text-center">
-                        <img src="{{asset('bootstrap/img/noface.gif')}}" alt="" width='180' height='180' id='face-img'>
+                        <img src="
+                        @if($user -> face180)
+                          {{$user -> face180}}
+                        @else
+                          {{asset('bootstrap/img/noface.gif')}}                                        
+                        @endif                        
+                        " alt="" width='180' height='180' id='face-img'>
                       </div>
                     </div>
 
@@ -207,9 +213,9 @@
                                     'uploader' : "{{url('/uploadFace')}}",
                                     'onUploadSuccess' : function(file, data, response) {
                                       $('#face-img').attr('src', data);
-                                      // $('input[name=face180]').val(data.path.max);
-                                      // $('input[name=face80]').val(data.path.medium);
-                                      // $('input[name=face50]').val(data.path.mini);                                    
+                                      $('input[name=face180]').val(data);
+                                      $('input[name=face80]').val(data);
+                                      $('input[name=face50]').val(data);                                    
                                     }
                                 });
                             });
