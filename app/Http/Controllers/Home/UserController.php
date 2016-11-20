@@ -8,6 +8,10 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Http\Models\Userinfo;
+use App\Http\Models\User;
+
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -19,7 +23,10 @@ class UserController extends Controller
 
 		$uid = $_SESSION['uid'];
 
-    		$user = Userinfo::where('uid',$uid)->select('username', 'truename', 'sex', 'location', 'constellation', 'intro', 'face180')->first();
+    		$user = Userinfo::where('uid',$uid)
+    			-> select('username', 'truename', 'sex', 'location', 'constellation', 'intro', 'face180')
+    			-> first();
+
 		return view('home/user')->with('user',$user);
 	}
 
@@ -47,7 +54,8 @@ class UserController extends Controller
 
 		$uid = $_SESSION['uid'];
 
-	           $result = Userinfo::where('uid',$uid) -> update($data);			
+	           $result = Userinfo::where('uid',$uid) 
+	           	-> update($data);			
 
 		if(!$result){
     			return back() -> with('errors','修改失败,请稍后重试');			
@@ -74,9 +82,12 @@ class UserController extends Controller
 			'face180' => $face180
 		);
 
-    		$oldFace = Userinfo::where('uid',$uid)->select('face50', 'face80','face180')->first();
+    		$oldFace = Userinfo::where('uid',$uid)
+    			-> select('face50', 'face80','face180')
+    			-> first();
 
-	           $result = Userinfo::where('uid',$uid) -> update($data);			
+	           $result = Userinfo::where('uid',$uid)
+	           	 -> update($data);			
 
 		if(!$result){
     			return back() -> with('errors','修改失败,请稍后重试');			
@@ -88,7 +99,59 @@ class UserController extends Controller
 			@unlink($oldFace -> face180);      			
     		}
   		
+    		return back() -> with('errors','修改成功');
 
+	}	
+
+	/**
+	 * 修改密码
+	 */
+	Public function editPwd(Request $request){
+
+		$old = $request->input('old');		
+		$new = $request->input('new');		
+		$newed = $request->input('password_confirmation');
+
+		$uid = $_SESSION['uid'];
+
+		//组合验证数据
+		$data = array(
+			'password' => $new,
+			'password_confirmation' => $newed
+		);
+
+		$rules = [
+			'password'=>'required|alpha_dash|between:5,17|confirmed'
+		];
+
+		$message = [
+			'password.required'=>'新密码不能为空',
+			'password.alpha_dash'=>'新密码必须以字母开头,且由字母、数字、下划线组成',
+			'password.between'=>'新密码在5-17位之间',
+			'password.confirmed'=>'两次密码不一致'
+		];
+
+		$validator = Validator::make($data,$rules,$message);
+		
+		if(!$validator->passes()){
+
+		    return back()->withErrors($validator);		    
+		}
+
+		//验证旧密码	
+    		$user = User::where('id',$uid)
+    			-> first();
+
+    		if(Crypt::decrypt($user -> password) != $old){
+    			return back() -> with('errors','旧密码错误');    			
+    		}
+
+		$user -> password = Crypt::encrypt($new);
+
+		if(!$user -> update()){
+    			return back() -> with('errors','修改失败,请稍后重试');			
+		}
+    		  		
     		return back() -> with('errors','修改成功');
 
 	}	

@@ -240,11 +240,65 @@
                     </form>
                </div>
                <div class="tab-pane fade" id="pass" style="padding:30px">
-                  <p>iOS is a mobile operating system developed and distributed by Apple 
-                     Inc. Originally released in 2007 for the iPhone, iPod Touch, and 
-                     Apple TV. iOS is derived from OS X, with which it shares the 
-                     Darwin foundation. iOS is Apple's mobile version of the 
-                     OS X operating system used on Apple computers.</p>
+
+                    <form method="post" action="{{url('editPwd')}}" name="editPwd">
+                    {{csrf_field()}}
+
+                    @if($errors)
+                      <div class="row">
+                        <div class="form-group col-lg-3">
+                        </div>                      
+                        <div class="form-group col-lg-3">
+                                          @if(is_object($errors))
+                                              <!-- withErrors -->
+                                              @foreach($errors->all() as $error)
+                                                  <span class="err">{{$error}}</span>
+                                              @endforeach
+                                          @else
+                                              <!-- 密码修改成功 + 原密码错误 -->                
+                                              <span class="err">{{$errors}}</span>
+                                          @endif
+                        </div>
+                      </div>                        
+                    @endif
+
+                      <div class="row">
+                        <div class="form-group col-lg-3 text-right">
+                          <span style="color:red;">* </span><label for="old">旧密码：</label>
+                        </div>
+                        <div class="form-group col-lg-3">                        
+                          <input type="text" class="form-control" value="" name="old" id="old">
+                        </div>                          
+                      </div>
+
+                      <div class="row">
+                        <div class="form-group col-lg-3 text-right">
+                          <span style="color:red;">* </span><label for="new">新密码：</label>
+                        </div>
+                        <div class="form-group col-lg-3">                        
+                          <input type="text" class="form-control" value="" id="new" name="new">
+                        </div>                          
+                      </div>
+
+                      <div class="row">
+                        <div class="form-group col-lg-3 text-right">
+                          <span style="color:red;">* </span><label for="password_confirmation">确认密码：</label>
+                        </div>
+                        <div class="form-group col-lg-3">                        
+                          <input type="text" class="form-control" value="" name="password_confirmation" id="password_confirmation">
+                        </div>                          
+                      </div>
+
+                      <div class="row">
+                        <div class="form-group col-lg-3">
+                        </div>
+                        <div class="form-group col-lg-1">                        
+                          <button class="btn btn-primary">保存修改</button>
+                        </div>                          
+                      </div>
+
+                    </form>
+
                </div>               
             </div>
 

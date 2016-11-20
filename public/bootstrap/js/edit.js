@@ -40,4 +40,48 @@ $(function () {
 	//星座默认选项
 	$('select[name=night]').val(constellation);
 
+	//jQuery Validate 表单验证
+
+	/**
+	 * 添加验证方法
+	 * 以字母开头，5-17 字母、数字、下划线"_"
+	 */
+	jQuery.validator.addMethod("user", function(value, element) {
+	    var tel = /^[a-zA-Z][\w]{4,16}$/;
+	    return this.optional(element) || (tel.test(value));
+	}, "以字母开头，5-17 字母、数字、下划线'_'");
+
+	$('form[name=editPwd]').validate({
+		errorElement : 'span',
+		success : function (label) {
+			label.addClass('success');
+		},
+		rules : {
+			old : {
+				required : true,
+				user : true
+			},
+			new : {
+				required : true,
+				user : true
+			},
+			password_confirmation : {
+				required : true,
+				equalTo : "#new"
+			}
+		},
+		messages : {
+			old : {
+				required : '请填写旧密码',
+			},
+			new : {
+				required : '请设置新密码'
+			},
+			password_confirmation : {
+				required : '请确认密码',
+				equalTo : '两次密码不一致'
+			}
+		}
+	});	
+
 });

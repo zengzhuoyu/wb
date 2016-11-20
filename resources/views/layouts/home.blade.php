@@ -8,10 +8,11 @@
            <link rel="stylesheet" type="text/css" href="{{asset('org/uploadify/uploadify.css')}}">	
 	<script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
 	<script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>	
+	<script src="{{asset('bootstrap/js/jquery.validate.min.js')}}"></script>	
 	<script src="{{asset('bootstrap/js/city.js')}}"></script>	
 	@yield('script')	
-	<script src="{{asset('bootstrap/js/editbasic.js')}}"></script>
-           <script src="{{asset('org/uploadify/jquery.uploadify.min.js')}}" type="text/javascript"></script>		
+           <script src="{{asset('org/uploadify/jquery.uploadify.min.js')}}" type="text/javascript"></script>
+	<script src="{{asset('bootstrap/js/edit.js')}}"></script>          		
 </head>
 <body>
 

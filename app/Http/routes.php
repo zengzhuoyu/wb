@@ -71,4 +71,6 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 	Route::post('/uploadFace', 'CommonController@upload');//个人设置：头像上传
 
 	Route::post('/editFace', 'UserController@editFace');//个人设置：头像上传表单提交
+
+	Route::post('/editPwd', 'UserController@editPwd');//个人设置：修改密码表单提交
 });

@@ -33,19 +33,16 @@ class LoginController extends Controller
 
 		//组合验证数据
 		$data = array(
-
 			'account' => $account,
 			'password' => $pwd
 		);
 
 		$rules = [
-
 			'account'=>'required|alpha_dash|between:5,17',
-			'password'=>'required|alpha_dash|between:5,17',
+			'password'=>'required|alpha_dash|between:5,17'
 		];
 
 		$message = [
-
 			'account.required'=>'账号不能为空',
 			'account.alpha_dash'=>'账号必须以字母开头,且由字母、数字、下划线组成',
 			'account.between'=>'账号在5-17位之间',
@@ -61,7 +58,9 @@ class LoginController extends Controller
 		    return back()->withErrors($validator);		    
 		}	
 
-    		$user = User::where('account',$account)->select('password', 'lock','id')->first();
+    		$user = User::where('account',$account)
+    			->select('password', 'lock','id')
+    			->first();
 
     		if(!$user || Crypt::decrypt($user -> password) != $pwd){
     			return back() -> with('errors','账号或者密码错误');    			
@@ -73,7 +72,6 @@ class LoginController extends Controller
 			
 		//处理下一次自动登录
 		if (isset($auto)) {
-
 			$ip = $request->getClientIp();
 			$value = $account . '|' . $ip;
 			$value = encryption($value);
@@ -116,7 +114,6 @@ class LoginController extends Controller
 
 		//组合验证数据
 		$data = array(
-
 			'account' => $account,
 			'password' => $pwd,
 			'password_confirmation' => $pwded,
@@ -124,14 +121,12 @@ class LoginController extends Controller
 		);
 
 		$rules = [
-
 			'account'=>'required|alpha_dash|between:5,17|unique:user',
 			'password'=>'required|alpha_dash|between:5,17|confirmed',
 			'username'=>'required|between:2,10|unique:userinfo'
 		];
 
 		$message = [
-
 			'account.required'=>'账号不能为空',
 			'account.alpha_dash'=>'账号必须以字母开头,且由字母、数字、下划线组成',
 			'account.between'=>'账号在5-17位之间',
@@ -199,7 +194,8 @@ class LoginController extends Controller
 
 		$account = $request->input('account');
 		
-    		$user = User::where('account',$account)->first();		
+    		$user = User::where('account',$account)
+    			->first();		
 
 		if($user){
 			echo 'false';
@@ -215,7 +211,8 @@ class LoginController extends Controller
 
 		$username = $request->input('uname');
 		
-    		$user = Userinfo::where('username',$username)->first();		
+    		$user = Userinfo::where('username',$username)
+    			->first();		
 
 		if($user){
 			echo 'false';
