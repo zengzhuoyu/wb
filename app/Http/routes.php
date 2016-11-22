@@ -73,4 +73,8 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 	Route::post('/editFace', 'UserController@editFace');//个人设置：头像上传表单提交
 
 	Route::post('/editPwd', 'UserController@editPwd');//个人设置：修改密码表单提交
+
+	Route::get('/searchUser', 'SearchController@searchUser');//搜索：找人	
+
+	Route::post('/addGroup', 'CommonController@addGroup');//创建新分组	
 });

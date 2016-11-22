@@ -17,22 +17,9 @@
 
       <div class="row row-offcanvas row-offcanvas-right">
 
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-          <div class="list-group">
-            <a href="#" class="list-group-item active">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-            <a href="#" class="list-group-item">Link</a>
-          </div>
-        </div><!--/.sidebar-offcanvas-->
+        @parent
 
-        <div class="col-xs-12 col-sm-9">
+        <div class="col-xs-12 col-sm-10">
           <div class="row">
 
             <ul id="myTab" class="nav nav-tabs">
@@ -302,8 +289,8 @@
                </div>               
             </div>
 
-        </div>
-      </div><!--/row-->
+          </div>
+        </div><!--/row-->
 
       </div>
 
