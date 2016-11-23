@@ -77,4 +77,8 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 	Route::get('/searchUser', 'SearchController@searchUser');//搜索：找人	
 
 	Route::post('/addGroup', 'CommonController@addGroup');//创建新分组	
+
+	Route::post('/getGroup', 'SearchController@getGroup');//+ 关注时获取自己建过的分组
+
+	Route::post('/addFollow', 'CommonController@addFollow');//+ 关注
 });

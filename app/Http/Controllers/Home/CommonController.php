@@ -8,6 +8,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Http\Models\Group;
+use App\Http\Models\Follow;
+use App\Http\Models\Userinfo;
 
 class CommonController extends Controller
 {
@@ -51,4 +53,32 @@ class CommonController extends Controller
 
 		return json_encode(['status' => 1, 'msg' => '创建成功']);		
 	}
+
+	/**
+	 * 异步添加关注
+	 */
+	Public function addFollow(Request $request){
+
+		$follow = $request->input('follow');
+		$gid = $request->input('gid');
+
+		$data = [
+			'follow' => $follow,
+			'fans' => $_SESSION['uid'],
+			'gid' => $gid
+		];
+
+		if(!Follow::insert($data)) return json_encode(['status' => 0, 'msg' => '关注失败,请稍后重试']);
+
+		Userinfo::where('uid',$follow)->increment('fans');
+		Userinfo::where('uid',$_SESSION['uid'])->increment('follow');
+
+		$result = Follow::where('fans',$follow)
+		->where('follow',$_SESSION['uid'])
+		->first();
+
+		if($result) return json_encode(['status' => 1, 'msg' => '关注成功','mutual' => 1]);
+
+		return json_encode(['status' => 1, 'msg' => '关注成功','mutual' => 0]);	
+	}	
 }

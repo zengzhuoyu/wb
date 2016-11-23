@@ -54,13 +54,13 @@
                 </div>           
                 <div class="form-group col-lg-3 pull-right">
                   @if($v -> mutual)
-                    <div style="padding:25px 0px;">互相关注</div>
-                    <div style="padding:25px 0px;">移 除</div>
+                    <span>互相关注</span> |
+                    <button>移除关注</button>
                   @elseif ($v -> followed)
-                    <div style="padding:25px 0px;">已关注</div>
-                    <div style="padding:25px 0px;">移 除</div>                    
+                    <span>√ 已关注</span> |
+                    <button>移除关注</button>                    
                   @else
-                    <div style="padding:25px 0px;">+ 关注</div>                  
+                    <button class="add-fl" uid="{{$v -> uid}}">+ 未关注</button>                  
                   @endif                  
 
                 </div>             
@@ -85,6 +85,29 @@
         </div>
 
         </div>
+
+        <!--==========加关注弹出框==========-->
+            <script type='text/javascript'>
+              var addFollow = "{{url('addFollow')}}";
+              var getGroup = "{{url('getGroup')}}";
+              var token = "{{csrf_token()}}";
+            </script>
+            <div id='follow'>
+                <div class="follow_head">
+                    <span class='follow_text fleft'>关注好友</span>
+                </div>
+                <div class='sel-group'>
+                    <span>好友分组：</span>
+                    <select name="gid">
+                    </select>
+                </div>
+                <div class='fl-btn-wrap'>
+                    <input type="hidden" name='follow'/>
+                    <span class='add-follow-sub'>关注</span>
+                    <span class='follow-cencle'>取消</span>
+                </div>
+            </div>
+        <!--==========加关注弹出框==========-->        
       </div>
 
     </div><!--/.container-->

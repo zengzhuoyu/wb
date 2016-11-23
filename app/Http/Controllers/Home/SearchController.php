@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Models\Userinfo;
 use App\Http\Models\Follow;
+use App\Http\Models\Group;
 
 class SearchController extends Controller
 {
@@ -69,5 +70,14 @@ class SearchController extends Controller
 		}
 
 		return $data;
+	}
+
+	//获得自己建过的分组
+	public function getGroup(){
+
+		$data = Group::where('uid',$_SESSION['uid'])
+			->get();
+
+		if($data) return json_encode(['status' => 1,'data' => $data]);		
 	}
 }

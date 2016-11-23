@@ -1,47 +1,64 @@
 $(function () {
 
-    //创建好友分组
-   $('#create_group').click(function () {
-   		var groupLeft = ($(window).width() - $('#add-group').width()) / 2;
-	 	var groupTop = $(document).scrollTop() + ($(window).height() - $('#add-group').height()) / 2;
-   		var gpObj = $('#add-group').show().css({
-	 		'left' : groupLeft,
-	 		'top' : groupTop
-	 	});
-   		createBg('group-bg');
-   		drag(gpObj, gpObj.find('.group_head'));
+    //好友关注
+   $('.add-fl').click(function () {
+         var followLeft = ($(window).width() - $('#follow').width()) / 2;
+         var followTop = $(document).scrollTop() + ($(window).height() - $('#follow').height()) / 2;
+         var flObj = $('#follow').show().css({
+         'left' : followLeft,
+         'top' : followTop
+      });
+         createBg('follow-bg');
+         drag(flObj, flObj.find('.follow_head'));
+         $('input[name=follow]').val($(this).attr('uid'));
+         $.post(//获得自己建过的分组
+            getGroup,
+            {_token : token},
+            function(data){
+               if(data.status){
+                  $("select[name='gid']").html('<option value="0">默认分组</option>');
+
+                  var html = '';
+                  $.each(data.data,function(i,v){
+                      html += "<option value=" + v.id + ">" + v.name + "</option>";
+                  });
+
+                  $("select[name='gid']").append(html);                  
+               }
+            }
+         ,'json');         
    });
 
-   //异步创建分组
-   $('.add-group-sub').click(function(){
-   	var groupName = $('#gp-name').val();
-   	if(groupName != ''){
-   		$.post(
-   			addGroup,
-   			{
-   				name : groupName,
-                                 _token : token                                 
-   			},
-   			function(data){
-   				if(data.status){
-	   				// alert(data.msg);
-                                          showTips(data.msg);       
-	   				$('#add-group').hide();
-                                         $('#group-bg').remove();//全屏透明背景层消除
-   				}else{
-   					alert(data.msg);
-   				}
-  				
-   			}
-   		,'json');
-   	}
+   //添加关注
+   $('.add-follow-sub').click(function () {
+         var follow = $('input[name=follow]').val();//所关注的人的ID
+         var group = $('select[name=gid]').val();//添加进的组别的ID
+         $.post(addFollow, {
+            follow : follow,
+            gid : group,
+            _token : token
+         }, function (data) {
+            if (data.status) {
+               var obj = $('.add-fl[uid=' + follow + ']').parent();
+               obj.find('.add-fl[uid=' + follow + ']').remove();
+               if(data.mutual){
+                  obj.append('<span>互相关注</span> | <button>移除关注</button>');
+               }else{
+                  obj.append('<span>√ 已关注</span> | <button>移除关注</button>');                  
+               }
+               $('#follow').hide();
+               $('#follow-bg').remove();
+            } else {
+               alert(data.msg);
+            }
+         }, 'json');
    });
 
-   //关闭
-   $('.group-cencle').click(function () {
-   		$('#add-group').hide();
-   		$('#group-bg').remove();
-   });   
+   //关闭关注框
+   $('.follow-cencle').click(function () {
+         $('#follow').hide();
+         $('#follow-bg').remove();
+   });
 
    /**
     * 创建全屏透明背景层
