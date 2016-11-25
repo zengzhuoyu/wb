@@ -10,12 +10,32 @@ use App\Http\Controllers\Controller;
 use App\Http\Models\Wb;
 use App\Http\Models\Picture;
 use App\Http\Models\Userinfo;
+use App\Http\Models\Follow;
 
 class IndexController extends Controller
 {
     public function index(){
 
-    	return view('home/index');
+    	$uid = $_SESSION['uid'];
+    	$uids = [$uid];
+
+    	$result = Follow::where('fans',$uid)
+    		->select('follow')
+    		->get();
+
+    	if($result){
+    		foreach($result as $v){
+    			$uids[] = $v['follow'];
+    		}
+    	}
+
+	$data = Wb::whereIn('wb.uid',$uids)
+		 ->select('wb.id','wb.content','wb.isturn','wb.time','wb.turn','wb.keep','wb.comment','wb.uid','userinfo.username','userinfo.face50 as face','picture.max','picture.medium','picture.mini')
+	            ->leftJoin('userinfo', 'wb.uid', '=', 'userinfo.uid')         
+	            ->leftJoin('picture', 'wb.id', '=', 'picture.wid')	    	                     
+	            ->get();
+
+    	return view('home/index')->with('data',$data);
     }
 
     public function quit(){
