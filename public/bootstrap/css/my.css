@@ -210,3 +210,66 @@ span.err{
     width: 50%; /* 6 columns */
   }
 }
+
+/*首页微博发布*/
+.emotion{
+  width:15px;
+  height:15px;
+  background:url(../img/icon.png) no-repeat -250px 0;
+  cursor: pointer;
+  margin-right: 10px;  
+}
+.icon-picture{
+  width:15px;
+  height:15px;
+  background:url(../img/icon.png) no-repeat -250px -24px;
+  cursor: pointer;
+  margin-right: 10px;  
+}
+#upload_img{
+  width:300px;
+  height:140px;
+  border: 2px solid #E1E1E1;
+  background: #fff;
+  position: absolute;
+  top:25px;
+  left:0px;
+}
+#upload_img .upload-title{
+  width:300px;
+  height:30px;
+  border-bottom: 1px solid #E1E1E1;
+  background:#FAFAFA;
+}
+#upload_img .upload-title p{
+  width:100px;
+  height:30px;
+  line-height:30px;
+  float: left;
+  font-weight: bold;
+  color:#888888;
+  text-indent: 1em;
+}
+.close{
+  display: block;
+  width:16px;
+  height:16px;
+  background:url(../img/icon.png) no-repeat -100px -200px;
+  margin: 7px 10px;
+  cursor: pointer;
+}
+#upload_img .upload-btn {
+  padding-top: 20px;
+}
+#upload_img #SWFUpload_0,#picture-button {
+  margin-left:85px;
+}
+#pic-show{
+  border: 3px solid #CCC;
+  border-radius: 4px;
+  padding:5px;
+  background: #fff;
+  position: absolute;
+  top:25px;
+  left:0px;
+}

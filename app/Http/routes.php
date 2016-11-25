@@ -81,4 +81,6 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 	Route::post('/getGroup', 'SearchController@getGroup');//+ 关注时获取自己建过的分组
 
 	Route::post('/addFollow', 'CommonController@addFollow');//+ 关注
+
+	Route::post('/sendWeibo', 'IndexController@sendWeibo');//首页发微博表单提交
 });

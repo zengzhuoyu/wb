@@ -15,6 +15,7 @@
 	<script src="{{asset('bootstrap/js/edit.js')}}"></script>        		
 	<script src="{{asset('bootstrap/js/left.js')}}"></script>        		
 	<script src="{{asset('bootstrap/js/follow.js')}}"></script>        		
+	<script src="{{asset('bootstrap/js/index.js')}}"></script>        		
 </head>
 <body>
 

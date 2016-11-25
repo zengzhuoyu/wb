@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Http\Models\Wb;
+use App\Http\Models\Picture;
+use App\Http\Models\Userinfo;
+
 class IndexController extends Controller
 {
     public function index(){
@@ -29,4 +33,47 @@ class IndexController extends Controller
             return redirect('/login');
     	
     }    
+
+	/**
+	 * 微博发布处理
+	 */
+	public function sendWeibo(Request $request){
+
+		$content = $request->input('content');
+		$max = $request->input('max');
+		$medium = $request->input('medium');
+		$mini = $request->input('mini');
+
+		if(strlen($content) > 50) return json_encode(['status' => 0, 'msg' => '内容在150字之内']);
+
+		$uid = $_SESSION['uid'];
+
+		$data = [
+			'content' => $content,
+			'time' => time(),
+			'uid' => $uid
+		];
+		
+		$wid = Wb::insert($data);
+
+		if(!$wid) return json_encode(['status' => 0, 'msg' => '发布失败,请稍后重试']);
+
+		if($max){
+
+			$img_data = [
+				'max' => $max,
+				'medium' => $medium,
+				'mini' => $mini,
+				'wid' => $wid
+			];
+
+			Picture::insert($img_data);
+		
+		}
+
+		Userinfo::where('uid',$uid)->increment('wb');
+
+		return json_encode(['status' => 1, 'msg' => '发布成功']);			
+
+	}    
 }

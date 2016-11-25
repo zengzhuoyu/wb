@@ -37,7 +37,7 @@ class CommonController extends Controller
 
 		if(!$name) return json_encode(['status' => 0, 'msg' => '名称不能为空']);
 
-		if(strlen($name) >= 15) return json_encode(['status' => 0, 'msg' => '名称在15位以内']);
+		if(strlen($name) >= 15) return json_encode(['status' => 0, 'msg' => '名称在15位之内']);
 
 		$data = [
 			'name' => $name,

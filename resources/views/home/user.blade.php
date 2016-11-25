@@ -209,7 +209,7 @@
                         </script>      
                         <style>
                             .uploadify{display:inline-block;}
-                            .uploadify-button{border:none; border-radius:5px; margin-top:8px;margin-left:35px;}
+                            .uploadify-button{border:none; border-radius:5px;}
                             table.add_tab tr td span.uploadify-button-text{color: #FFF; margin:0;}
                         </style>                                                         
                         <input type="hidden" name='face180' value=''/>
