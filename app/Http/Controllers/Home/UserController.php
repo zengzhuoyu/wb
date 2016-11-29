@@ -154,5 +154,11 @@ class UserController extends Controller
     		  		
     		return back() -> with('errors','修改成功');
 
+	}
+
+	//用户个人信息页
+	public function userInfo($id){
+
+		p($id);	
 	}	
 }

@@ -273,3 +273,162 @@ span.err{
   top:25px;
   left:0px;
 }
+
+/*首页微博图片*/
+.mini_img{
+  cursor: url(../img/big.cur), auto !important;
+}
+.img_info img{
+  cursor: url(../img/small.cur), auto !important;
+}
+.packup{
+  color:#2B96E1;
+  cursor: pointer;
+}
+.turn{
+  color:#2B96E1;
+  cursor: pointer;
+}
+/**转发输入框**/
+#turn{
+  width:494px;
+  height:auto;
+  overflow: hidden;
+  background:#fff;
+  border:3px solid #9D9D9D;
+  border-radius: 4px;
+  position:absolute;
+  z-index:3
+}
+#turn .turn_head{
+  width:494px;
+  height:30px;
+  background: #f6f6f6;
+}
+#turn .turn_head .turn_text{
+  display:block;
+  width:458px;
+  height:30px;
+  line-height:30px;
+  font-weight: bold;
+  text-indent: 1em;
+  cursor: move;
+}
+#turn .turn_main{
+  width:454px;
+  height:auto;
+  overflow: hidden;
+  padding:10px 20px;
+}
+#turn .turn_main p{
+  width:434px;
+  height:auto;
+  line-height:23px;
+  padding:10px;
+  background: #f3f3f3;
+  word-wrap:break-word;
+}
+#turn .turn_main .turn_prompt{
+  width:454px;
+  height:24px;
+  line-height:24px;
+  text-align: right;
+  margin:5px 0;
+  color:#808080;
+}
+#turn .turn_main .turn_prompt #turn_num{
+  font-family: Constantia,Georgia;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: 700;
+    color:#808080;
+}
+#turn .turn_main textarea{
+  width:444px;
+    height: 45px;
+    line-height: 18px;
+    color: #595959;
+    border:1px solid #ccc;
+    border-radius: 3px;
+    resize:none;
+    overflow: hidden;
+    padding: 4px 4px 0;
+    word-wrap: break-word;
+    box-shadow: 1px 1px 1px 0 #EAEAEA inset;
+}
+#turn .turn_main ul{
+  width:454px;
+  height:10px;
+  padding:10px 0;
+}
+#turn .turn_main .phiz{
+  width:15px;
+  height:15px;
+  background:url(../img/icon.png) no-repeat -250px 0px;
+  margin-top:3px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+#turn .turn_main .turn_comment{
+  width:160px;
+  height:22px;
+  line-height:22px;
+}
+#turn .turn_main .turn_comment input{
+  width:22px;
+  height:22px;
+  vertical-align: middle;
+}
+#turn .turn_main .turn_btn{
+  width:50px;
+  height:20px;
+  line-height: 20px;
+  text-align: center;;
+  background: #F9AB00;
+  color:#fff;
+  border:1px solid #FF9B00;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.fleft{
+  float:left;
+}
+.fright{
+  float:right;
+}
+.close{
+  display: block;
+  width:16px;
+  height:16px;
+  background:url(../img/icon.png) no-repeat -75px -200px;
+  margin: 7px 10px;
+  cursor: pointer;
+}
+
+/*全局*/
+* {
+  padding: 0px;
+  margin: 0px;
+  font-size: 13px;
+  color: #444;
+  font:12px/1.125 Arial,Helvetica,sans-serif;_font-family:"SimSun";
+}
+body{
+  /*background:url(../img/body_bg.jpg) no-repeat fixed;*/
+}
+ul, ol {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color:#0a8cd2;
+}
+img {
+  border:none;
+}
+table {
+  border-collapse: collapse;
+}
+input,textarea,select,button{
+  outline:none;
+}

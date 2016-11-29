@@ -74,8 +74,150 @@
               </div>               
               <div class="col-xs-6 col-lg-6 text-right">
                 <button id="send_weibo">发 布</button>
-              </div>                        
+              </div>
+                                      
           </div>
+
+@foreach($data as $v)
+
+    @if(!$v -> isturn)
+
+        <!-- 普通样式 -->
+          <div class="row">
+
+            <div class="col-xs-6 col-lg-1">
+            </div>          
+            <div class="col-xs-6 col-lg-1">
+                <img src="
+                    @if($v -> face)
+                        {{$v -> face}}
+                    @else
+                        {{asset('bootstrap/img/noface.gif')}}                                                    
+                    @endif
+                " alt="" width="50" height="50">
+            </div>             
+            <div class="col-xs-6 col-lg-1">
+            </div>       
+            <div class="col-xs-6 col-lg-9 wb_main">
+                <div style="font-weight:bold;" class="author">
+                    <a href="{{url('userInfo/'.$v -> uid)}}">{{$v -> username}}</a>
+                </div>
+                <div class="content">{!! replace_weibo($v -> content) !!}</div>
+                @if($v -> max)                
+                    <div>
+                        <img src="{{$v -> mini}}" alt="" width="50" height="50" class="mini_img">
+                        <div style="display:none;" class="img_tool">
+                            <ul style="list-style:none;">
+                                <li class="packup">收 起</li>
+                                <li><a href="{{$v -> max}}" target="_blank">查看大图</a></li>
+                            </ul>
+                            <div class="img_info">
+                                <img src="{{$v -> medium}}" alt="" width="80" height="80">
+                            </div>
+                        </div>
+                    </div>
+                @endif                
+                <div style="clear:both;">
+                    <div class="pull-left">{{time_format($v -> time)}}</div>
+                    <div class="pull-right"><span class="turn" id="{{$v -> id}}">转发</span>
+                        @if($v -> turn)
+                            ({{$v -> turn}})                                
+                        @endif
+                     | 收藏
+                        @if($v -> keep)
+                            ({{$v -> keep}})                                
+                        @endif                  
+                     | 评论
+                        @if($v -> comment)
+                            ({{$v -> comment}})                                
+                        @endif
+                    </div>
+                </div>
+            </div>             
+
+          </div>
+
+          <hr>
+
+    @else
+
+        <!-- 转发样式 -->
+          <div class="row">
+
+            <div class="col-xs-6 col-lg-1">
+            </div>          
+            <div class="col-xs-6 col-lg-1">
+                <img src="
+                    @if($v -> face)
+                        {{$v -> face}}
+                    @else
+                        {{asset('bootstrap/img/noface.gif')}}                                                    
+                    @endif
+                " alt="" width="50" height="50">
+            </div>             
+            <div class="col-xs-6 col-lg-1">
+            </div>       
+            <div class="col-xs-6 col-lg-9 wb_main">
+                <div style="font-weight:bold;" class="author"><a href="{{url('userInfo/'.$v -> uid)}}">{{$v -> username}}</a></div>
+                <div class="content">{!! replace_weibo($v -> content) !!}</div>
+
+                <!-- 转发的原微博内容开始 -->
+                <div style="margin:20px;padding:20px;border:1px solid #eee;">
+                    <div style="font-weight:bold;" class="turn_name"><a href="{{url('userInfo/'.$v['isturn']['uid'])}}">{{$v['isturn']['username']}}</a></div>
+                    <div class="turn_cons">{!! replace_weibo($v['isturn']['content']) !!}</div>
+                    @if($v['isturn']['max'])                
+                        <div>
+                            <img src="{{$v['isturn']['mini']}}" alt="" width="50" height="50" class="mini_img">
+                            <div style="display:none;" class="img_tool">
+                                <ul style="list-style:none;">
+                                    <li class="packup">收 起</li>
+                                    <li><a href="{{$v['isturn']['max']}}" target="_blank">查看大图</a></li>
+                                </ul>
+                                <div class="img_info">
+                                    <img src="{{$v['isturn']['medium']}}" alt="" width="80" height="80">
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    <div style="clear:both;">
+                        <div class="pull-left">{{time_format($v['isturn']['time'])}}</div>
+                        <div class="pull-right"><span class="" id="">转发</span>
+                        @if($v['isturn']['turn'])
+                            ({{$v['isturn']['turn']}})                                
+                        @endif                 
+                     | 评论
+                        @if($v['isturn']['comment'])
+                            ({{$v['isturn']['comment']}})                                
+                        @endif                            
+                        </div>
+                    </div>                    
+                </div>
+                <!-- 转发的原微博内容结束 -->
+
+                <div style="clear:both;">
+                    <div class="pull-left">{{time_format($v -> time)}}</div>
+                    <div class="pull-right"><span class="turn" id="{{$v -> id}}" tid="{{$v['isturn']['id']}}">转发</span>
+                        @if($v -> turn)
+                            ({{$v -> turn}})                                
+                        @endif
+                     | 收藏
+                        @if($v -> keep)
+                            ({{$v -> keep}})                                
+                        @endif                  
+                     | 评论
+                        @if($v -> comment)
+                            ({{$v -> comment}})                                
+                        @endif
+                    </div>
+                </div>
+            </div>               
+          </div>
+
+          <hr>
+
+    @endif
+
+@endforeach
 
         </div>
 
@@ -152,6 +294,39 @@
                 </ul>
             </div>
         <!--==========表情==========-->
+
+        <!--==========转发输入框==========-->
+  
+            <div id='turn' style='display:none;'>
+                <div class="turn_head">
+                    <span class='turn_text fleft'>转发微博</span>
+                    <span class="close fright"></span>
+                </div>
+                <div class="turn_main">
+                    <form action='{{url("turn")}}' method='post' name='turn'>
+                    {{csrf_field()}}
+                        <p></p>
+                        <div class='turn_prompt'>
+                            你还可以输入<span id='turn_num'>140</span>个字</span>
+                        </div>
+                        <textarea name='content' sign='turn'></textarea>
+                        <ul>
+                            <li class='phiz fleft' sign='turn'></li>
+                            <li class='turn_comment fleft'>
+                                <label>
+                                    <input type="checkbox" name='becomment'/>同时评论给<span class='turn-cname'></span>
+                                </label>
+                            </li>
+                            <li class='turn_btn fright'>
+                                <input type="hidden" name='id' value=''/>
+                                <input type="hidden" name='tid' value=''/>
+                                <input type="submit" value='转发' class='turn_btn'/>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        <!--==========转发输入框==========-->
 
       </div><!--/row-->
 
