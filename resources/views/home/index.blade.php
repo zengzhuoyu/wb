@@ -159,7 +159,7 @@
             </div>       
             <div class="col-xs-6 col-lg-9 wb_main">
                 <div style="font-weight:bold;" class="author"><a href="{{url('userInfo/'.$v -> uid)}}">{{$v -> username}}</a></div>
-                <div class="content">{!! replace_weibo($v -> content) !!}</div>
+                <div class="content">{!! replace_weibo(str_replace('//','<span style="color:#ccc;font-weight: bold;">&nbsp;//&nbsp;</span>',$v -> content)) !!}</div>
 
                 <!-- 转发的原微博内容开始 -->
                 <div style="margin:20px;padding:20px;border:1px solid #eee;">
@@ -218,6 +218,13 @@
     @endif
 
 @endforeach
+        
+        <div class="row text-center">
+            <div class="col-xs-6 col-lg-12">
+                {{$data->links()}}                
+            </div>
+        </div>
+
 
         </div>
 

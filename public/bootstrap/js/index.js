@@ -176,8 +176,7 @@ $(function () {
 		// url地址
 		content = content.replace(/<a.*?>(.*?)<\/a>/ig, '$1');
 
-		return content;
-		// return content.replace(/<span.*?>\&nbsp;(\/\/)\&nbsp;<\/span>/ig, '$1');
+		return content.replace(/<span.*?>\&nbsp;(\/\/)\&nbsp;<\/span>/ig, '$1');
 	}	
 
 	/**

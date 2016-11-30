@@ -35,7 +35,7 @@ class IndexController extends Controller
 	            ->leftJoin('userinfo', 'wb.uid', '=', 'userinfo.uid')         
 	            ->leftJoin('picture', 'wb.id', '=', 'picture.wid')
 	            ->orderBy('time','desc')	    	                     
-	            ->get();
+	            ->paginate(10);
 
 	//重组结果集数组，得到转发微博
 	if($data) $data = (new Wb)->getTurn($data);
