@@ -171,6 +171,7 @@ class IndexController extends Controller
 
 		$content = $request->input('content','');
 		$wid = $request->input('wid',0);
+		$isturn = $request->input('isturn',0);
 
 		$uid = $_SESSION['uid'];
 
@@ -182,6 +183,35 @@ class IndexController extends Controller
 			'wid' => $wid
 		];
 
+		if(!Comment::insertGetId($data)) return 'false';
+
+		//被评论的微博评论数加1
+		Wb::where('id',$wid)->increment('comment');
+
+		//获得被评论的微博的发布者用户名
+		$weibo = Wb::where('id',$wid) -> select('id','uid','content','isturn') -> first();
+		$username = Userinfo::where('id',$weibo -> uid) -> select('username') -> first();
+
+		//评论同时转发时处理
+		if ($isturn) {
+			//读取转发微博ID与内容
+			$content = $weibo['isturn'] ? $content . ' // @' . $username -> username . ' : ' . $weibo['content'] : $content;
+
+			//同时转发到微博的数据
+			$cons = [
+				'content' => $content,
+				'isturn' => $weibo['isturn'] ? $weibo['isturn'] : $wid,
+				'time' => $data['time'],
+				'uid' => $uid
+			];
+
+			//被评论的微博的转发数加1
+			if (Wb::insertGetId($cons)) Wb::where('id',$weibo -> id)->increment('turn');
+
+			return 1;
+		}
+
+		//读取评论用户信息
 		$user  = Userinfo::where('uid',$uid) -> select('username','face50 as face') -> first();
 
 		//组合评论样式字符串返回
@@ -205,7 +235,5 @@ class IndexController extends Controller
 		
 		return $str;
 
-
-		
 	}	
 }

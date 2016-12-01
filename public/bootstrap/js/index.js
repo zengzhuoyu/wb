@@ -112,7 +112,7 @@ $(function () {
 
 	 	$('.turn_main p').html(author + ' : ' + content);//最上面的信息条	 	
 
-	 	// //提取原微博ID
+	 	//提取原微博ID
 	 	$('form[name=turn] input[name=id]').val($(this).attr('id'));
 
 	 	//----------------------------------------------------
@@ -239,20 +239,16 @@ $(function () {
 		};
 
 		$.post(comment, cons, function (data) {
-
-			_textarea.val('');
-			commentList.find('ul').after(data);
-			
-			// if (data != 'false') {
-			// 	if (cons.isturn) {
-			// 		window.location.reload();
-			// 	} else {
-			// 		_textarea.val('');
-			// 		commentList.find('ul').after(data);
-			// 	}
-			// } else {
-			// 	alert('评论失败，请重试...');
-			// }
+			if (data != 'false') {
+				if (cons.isturn) {//同时转发到我的微博
+					window.location.reload();
+				} else {//只是评论
+					_textarea.val('');
+					commentList.find('ul').after(data);
+				}
+			} else {
+				alert('评论失败，请稍后重试');
+			}
 		}, 'html');
 	});	
 });
