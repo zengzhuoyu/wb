@@ -43,21 +43,21 @@ class IndexController extends Controller
     	return view('home/index')->with('data',$data);
     }
 
-    public function quit(){
+	public function quit(){
 
-	//卸载SESSION
-	unset($_SESSION['uid']);
+		//卸载SESSION
+		unset($_SESSION['uid']);
 
-	//删除用于自动登录的COOKIE
-	//有效时间设置成过期时间，浏览器就会把它删除掉
-	if(isset($_COOKIE['auto'])){
-		@setcookie('auto', '', time() - 3600);		
-	}
+		//删除用于自动登录的COOKIE
+		//有效时间设置成过期时间，浏览器就会把它删除掉
+		if(isset($_COOKIE['auto'])){
+			@setcookie('auto', '', time() - 3600);		
+		}
 
-	//跳转致登录页
-            return redirect('/login');
-    	
-    }    
+		//跳转致登录页
+	        return redirect('/login');
+		
+	}    
 
 	/**
 	 * 微博发布处理
@@ -163,4 +163,49 @@ class IndexController extends Controller
 		return redirect('/');
 	
 	}
+
+	/**
+	 * 评论
+	 */
+	public function comment(Request $request){
+
+		$content = $request->input('content','');
+		$wid = $request->input('wid',0);
+
+		$uid = $_SESSION['uid'];
+
+		//提取评论数据
+		$data = [
+			'content' => $content,
+			'time' => time(),
+			'uid' => $uid,
+			'wid' => $wid
+		];
+
+		$user  = Userinfo::where('uid',$uid) -> select('username','face50 as face') -> first();
+
+		//组合评论样式字符串返回
+		$str = '';
+		$str .= '<dl class="comment_content">';
+		$str .= '<dt><a href="/userInfo/'. $uid .'">';
+		$str .= '<img src="';
+		if ($user -> face){
+			$str .= $user -> face;
+		} else {
+			$str .= 'bootstrap/img/noface.gif';
+		}
+		$str .= '" alt="' . $user -> username . '" width="30" height="30"/>';
+        		$str .= '</a></dt><dd>';  
+        		$str .= '<a href="/userinfo/'. $uid .'" class="comment_name">';
+        		$str .= $user -> username . '</a> : ' . replace_weibo($content);
+        		$str .= '&nbsp;&nbsp;( ' . time_format($data['time']) . ' )';
+        		$str .= '<div class="reply">';
+        		$str .= '<a href="">回复</a>';
+		$str .= '</div></dd></dl>';
+		
+		return $str;
+
+
+		
+	}	
 }

@@ -207,4 +207,52 @@ $(function () {
 			moving = false;	//鼠标抬起消取拖拽状态
 		});
 	}
+
+	/**
+	 * 点击评论，出现评论框
+	 */
+	$(".comment").click(function(){
+	  
+	  $(this).parents('.wb_main').find('.comment_list').css('display','block');
+
+	});	
+
+	//提交评论
+	$('.comment_btn').click(function () {
+		var commentList = $(this).parents('.comment_list');
+		var _textarea = commentList.find('textarea');
+		var content = _textarea.val();
+
+		//评论内容为空时不作处理
+		if (content == '') {
+			_textarea.focus();
+			return false;
+		}
+
+		//提取评论数据
+		var cons = {
+			content : content,
+			wid : $(this).attr('wid'),
+			// uid : $(this).attr('uid'),
+			isturn : $(this).prev().find('input:checked').val() ? 1 : 0,
+			_token : token
+		};
+
+		$.post(comment, cons, function (data) {
+
+			_textarea.val('');
+			commentList.find('ul').after(data);
+			
+			// if (data != 'false') {
+			// 	if (cons.isturn) {
+			// 		window.location.reload();
+			// 	} else {
+			// 		_textarea.val('');
+			// 		commentList.find('ul').after(data);
+			// 	}
+			// } else {
+			// 	alert('评论失败，请重试...');
+			// }
+		}, 'html');
+	});	
 });

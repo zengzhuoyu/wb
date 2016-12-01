@@ -156,4 +156,6 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 
 	Route::post('/turn', 'IndexController@turn');//首页微博转发表单提交
 
+	Route::post('/comment', 'IndexController@comment');//首页微博评论表单提交
+
 });

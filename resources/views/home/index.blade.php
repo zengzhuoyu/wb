@@ -127,12 +127,33 @@
                         @if($v -> keep)
                             ({{$v -> keep}})                                
                         @endif                  
-                     | 评论
+                     | <span class="comment">评论</span>
                         @if($v -> comment)
                             ({{$v -> comment}})                                
                         @endif
                     </div>
                 </div>
+
+                <br>
+
+                <!--=====回复框=====-->
+                    <script>
+                    var comment = "{{url('comment')}}";
+                    </script>
+                    <div class='comment_list' style="display:none;">
+                        <textarea name="" sign=''></textarea>
+                        <ul>
+                            <li class='phiz fleft' sign=''></li>
+                            <li class='comment_turn fleft'>
+                                <label>
+                                    <input type="checkbox" name=''/>同时转发到我的微博
+                                </label>
+                            </li>
+                            <li class='comment_btn fright' wid='{{$v -> id}}'>评论</li>
+                        </ul>
+                    </div>
+                <!--=====回复框结束=====-->
+
             </div>             
 
           </div>
@@ -204,12 +225,30 @@
                         @if($v -> keep)
                             ({{$v -> keep}})                                
                         @endif                  
-                     | 评论
+                     | <span class="comment">评论</span>
                         @if($v -> comment)
                             ({{$v -> comment}})                                
                         @endif
                     </div>
                 </div>
+
+                <br>
+
+                <!--=====回复框=====-->
+                    <div class='comment_list' style="display:none;">
+                        <textarea name="" sign=''></textarea>
+                        <ul>
+                            <li class='phiz fleft' sign=''></li>
+                            <li class='comment_turn fleft'>
+                                <label>
+                                    <input type="checkbox" name=''/>同时转发到我的微博
+                                </label>
+                            </li>
+                            <li class='comment_btn fright' wid='{{$v -> id}}'>评论</li>
+                        </ul>
+                    </div>
+                <!--=====回复框结束=====-->
+
             </div>               
           </div>
 
