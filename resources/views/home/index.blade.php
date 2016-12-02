@@ -127,7 +127,7 @@
                         @if($v -> keep)
                             ({{$v -> keep}})                                
                         @endif                  
-                     | <span class="comment">评论</span>
+                     | <span class="comment" wid="{{$v -> id}}">评论</span>
                         @if($v -> comment)
                             ({{$v -> comment}})                                
                         @endif
@@ -138,8 +138,12 @@
 
                 <!--=====回复框=====-->
                     <script>
-                    var comment = "{{url('comment')}}";
+                        var comment = "{{url('comment')}}";
+                        var getComment = "{{url('getComment')}}";
                     </script>
+                    <div class='comment_load' style="display:none;">
+                        <img src="bootstrap/img/loading.gif" alt="">评论加载中,请稍候...
+                    </div>
                     <div class='comment_list' style="display:none;">
                         <textarea name="" sign=''></textarea>
                         <ul>
@@ -225,7 +229,7 @@
                         @if($v -> keep)
                             ({{$v -> keep}})                                
                         @endif                  
-                     | <span class="comment">评论</span>
+                     | <span class="comment" wid="{{$v -> id}}">评论</span>
                         @if($v -> comment)
                             ({{$v -> comment}})                                
                         @endif
@@ -235,6 +239,9 @@
                 <br>
 
                 <!--=====回复框=====-->
+                    <div class='comment_load' style="display:none;">
+                        <img src="bootstrap/img/loading.gif" alt="">评论加载中,请稍候...
+                    </div>                
                     <div class='comment_list' style="display:none;">
                         <textarea name="" sign=''></textarea>
                         <ul>

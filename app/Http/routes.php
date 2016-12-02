@@ -158,4 +158,6 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 
 	Route::post('/comment', 'IndexController@comment');//首页微博评论表单提交
 
+	Route::post('/getComment', 'IndexController@getComment');//首页微博获得评论信息
+
 });

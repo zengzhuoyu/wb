@@ -226,13 +226,86 @@ class IndexController extends Controller
 		}
 		$str .= '" alt="' . $user -> username . '" width="30" height="30"/>';
         		$str .= '</a></dt><dd>';  
-        		$str .= '<a href="/userinfo/'. $uid .'" class="comment_name">';
+        		$str .= '<a href="/userInfo/'. $uid .'" class="comment_name">';
         		$str .= $user -> username . '</a> : ' . replace_weibo($content);
         		$str .= '&nbsp;&nbsp;( ' . time_format($data['time']) . ' )';
         		$str .= '<div class="reply">';
         		$str .= '<a href="">回复</a>';
 		$str .= '</div></dd></dl>';
 		
+		return $str;
+
+	}	
+
+	/**
+	 * 异步获取评论内容
+	 */
+	public function getComment(Request $request){
+
+		// 测试用才写
+		// sleep(1);
+
+		$wid = $request->input('wid',0);
+		$page = $request->input('page',1);
+
+		//数据的总条数
+		$count = Comment::where('wid',$wid)->count();
+		//数据可分的总页数
+		$total = ceil($count / 10);
+
+		$skip = $page < 2 ? 0 : ($page -1) * 10;
+		
+		$data = Comment::where('comment.wid',$wid)
+			 ->select('comment.id','comment.content','comment.wid','comment.time','userinfo.username','userinfo.face50 as face','userinfo.uid')
+		            ->leftJoin('userinfo', 'comment.uid', '=', 'userinfo.uid')         
+		            ->orderBy('time','desc')	    	            
+		            ->skip($skip)
+		            ->take(10)         
+		            ->get();
+
+		if (!$data) return 'false';
+
+		$str = '';
+		foreach ($data as $v) {
+			$str .= '<dl class="comment_content">';
+			$str .= '<dt><a href="/userInfo/'. $v -> uid .'">';
+			$str .= '<img src="';
+			if ($v -> face){
+				$str .= $v -> face;
+			} else {
+				$str .= 'bootstrap/img/noface.gif';
+			}
+			$str .= '" alt="' . $v -> username . '" width="30" height="30"/>';
+	        		$str .= '</a></dt><dd>';  
+	        		$str .= '<a href="/userInfo/'. $v -> uid .'" class="comment_name">';
+	        		$str .= $v -> username . '</a> : ' . replace_weibo($v -> content);
+	        		$str .= '&nbsp;&nbsp;( ' . time_format($v -> time) . ' )';
+	        		$str .= '<div class="reply">';
+	        		$str .= '<a href="">回复</a>';
+			$str .= '</div></dd></dl>';
+		}
+
+		if ($total > 1) {
+			$str .= '<dl class="comment-page">';
+
+			switch ($page) {
+				case $page > 1 && $page < $total :
+					$str .= '<dd class="page" page="' . ($page - 1) . '" wid="' . $wid . '">上一页</dd>';
+					$str .= '<dd class="page" page="' . ($page + 1) . '" wid="' . $wid . '">下一页</dd>';
+					break;
+
+				case $page < $total :
+					$str .= '<dd class="page" page="' . ($page + 1) . '" wid="' . $wid . '">下一页</dd>';
+					break;
+
+				case $page == $total :
+					$str .= '<dd class="page" page="' . ($page - 1) . '" wid="' . $wid . '">上一页</dd>';
+					break;
+			}
+
+			$str .= '</dl>';
+		}
+
 		return $str;
 
 	}	

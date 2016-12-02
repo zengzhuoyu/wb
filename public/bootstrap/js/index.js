@@ -213,9 +213,60 @@ $(function () {
 	 */
 	$(".comment").click(function(){
 	  
-	  $(this).parents('.wb_main').find('.comment_list').css('display','block');
+		var commentLoad = $(this).parents('.wb_main').find('.comment_load');
+		var commentList = $(this).parents('.wb_main').find('.comment_list');
 
+		// commentLoad.css('display','block');
+		// commentList.css('display','block');
+		//  ==
+		// commentLoad.show();
+		// commentList.show();
+
+		//提取当前评论按钮对应微博的ID号
+		var wid = $(this).attr('wid');
+
+		//异步提取评论内容
+		$.ajax({
+			url : getComment,
+			data : {
+				wid : wid,
+				_token : token
+			},
+			dataType : 'html',
+			type : 'post',
+			beforeSend : function () {
+				commentLoad.show();
+			},
+			success : function (data) {
+				if (data != 'false') {
+					commentList.append(data);
+				}
+			},
+			complete : function () {
+				commentLoad.hide();
+				commentList.show().find('textarea').val('').focus();
+			}
+		});
+		// ==
+		// commentLoad.show();
+		// $.post(getComment, {
+		// 		wid : wid,
+		// 		_token : token
+		// 	}, function (data) {
+		// 		if (data != 'false') {
+		// 			commentList.append(data);
+		// 		}
+		// 		commentLoad.hide();
+		// 		commentList.show().find('textarea').val('').focus();				
+		// }, 'html');		
 	});	
+
+	//回复
+	$('body').on('click','.reply a', function () {
+		var reply = $(this).parent().siblings('a').html();
+		$(this).parents('.comment_list').find('textarea').val('回复@' + reply + ' ：');
+		return false;
+	});
 
 	//提交评论
 	$('.comment_btn').click(function () {
@@ -251,4 +302,35 @@ $(function () {
 			}
 		}, 'html');
 	});	
+
+	/**
+	 * 评论异步分类处理
+	 */
+	$('body').on('click','.page',function () {
+		var commentList = $(this).parents('.comment_list');
+		var commentLoad = commentList.prev();
+		var wid = $(this).attr('wid');
+		var page = $(this).attr('page');
+		//异步提取评论内容
+		$.ajax({
+			url : getComment,
+			data : {wid : wid, page : page,_token : token},
+			dataType : 'html',
+			type : 'post',
+			beforeSend : function () {
+				commentList.hide().find('dl').remove();
+				commentLoad.show();
+			},
+			success : function (data) {
+				if (data != 'false') {
+					commentList.append(data);
+				}
+			},
+			complete : function () {
+				commentLoad.hide();
+				commentList.show().find('textarea').val('').focus();
+			}
+		});
+	});	
+
 });
