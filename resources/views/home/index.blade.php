@@ -78,6 +78,8 @@
                                       
           </div>
 
+@if(count($data) > 0)
+
 @foreach($data as $v)
 
     @if(!$v -> isturn)
@@ -264,12 +266,19 @@
     @endif
 
 @endforeach
-        
+
         <div class="row text-center">
             <div class="col-xs-6 col-lg-12">
                 {{$data->links()}}                
             </div>
         </div>
+
+@else
+
+    没有发布微博    
+
+@endif
+
 
 
         </div>

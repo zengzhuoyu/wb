@@ -160,4 +160,5 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 
 	Route::post('/getComment', 'IndexController@getComment');//首页微博获得评论信息
 
+	Route::get('/{gid}', 'IndexController@index')->where('gid', '[0-9]+');//首页自建分组 - 点击分组，相应微博显示在首页
 });

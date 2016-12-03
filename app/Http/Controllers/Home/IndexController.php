@@ -15,33 +15,41 @@ use App\Http\Models\Comment;
 
 class IndexController extends Controller
 {
-    public function index(){
+	public function index($gid = 0){
+		
+		$uids = [];
+		$where = [];
 
-    	$uid = $_SESSION['uid'];
-    	$uids = [$uid];
+		if($gid) {
+			$where['gid'] = $gid;
+		}else{
+			$uid = $_SESSION['uid'];
+			$uids =[$uid];
+			$where['fans'] = $uid;
+		}
+		
+		$result = Follow::where($where)
+			->select('follow')
+			->get();
 
-    	$result = Follow::where('fans',$uid)
-    		->select('follow')
-    		->get();
+		if($result){
+			foreach($result as $v){
+				$uids[] = $v['follow'];
+			}
+		}
 
-    	if($result){
-    		foreach($result as $v){
-    			$uids[] = $v['follow'];
-    		}
-    	}
+		$data = Wb::whereIn('wb.uid',$uids)
+			 ->select('wb.id','wb.content','wb.isturn','wb.time','wb.turn','wb.keep','wb.comment','wb.uid','userinfo.username','userinfo.face50 as face','picture.max','picture.medium','picture.mini')
+		            ->leftJoin('userinfo', 'wb.uid', '=', 'userinfo.uid')         
+		            ->leftJoin('picture', 'wb.id', '=', 'picture.wid')
+		            ->orderBy('time','desc')	    	                     
+		            ->paginate(10);
 
-	$data = Wb::whereIn('wb.uid',$uids)
-		 ->select('wb.id','wb.content','wb.isturn','wb.time','wb.turn','wb.keep','wb.comment','wb.uid','userinfo.username','userinfo.face50 as face','picture.max','picture.medium','picture.mini')
-	            ->leftJoin('userinfo', 'wb.uid', '=', 'userinfo.uid')         
-	            ->leftJoin('picture', 'wb.id', '=', 'picture.wid')
-	            ->orderBy('time','desc')	    	                     
-	            ->paginate(10);
+		//重组结果集数组，得到转发微博
+		if($data) $data = (new Wb)->getTurn($data);
 
-	//重组结果集数组，得到转发微博
-	if($data) $data = (new Wb)->getTurn($data);
-
-    	return view('home/index')->with('data',$data);
-    }
+		return view('home/index')->with('data',$data);
+	}
 
 	public function quit(){
 
@@ -253,7 +261,7 @@ class IndexController extends Controller
 		//数据可分的总页数
 		$total = ceil($count / 10);
 
-		$skip = $page < 2 ? 0 : ($page -1) * 10;
+		$skip = $page < 2 ? 0 : ($page - 1) * 10;
 		
 		$data = Comment::where('comment.wid',$wid)
 			 ->select('comment.id','comment.content','comment.wid','comment.time','userinfo.username','userinfo.face50 as face','userinfo.uid')

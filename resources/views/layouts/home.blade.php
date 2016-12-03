@@ -46,7 +46,10 @@
 	        <button type="submit" class="btn btn-success">搜 索</button>
 	      </form>
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="../navbar/">Default</a></li>
+		<?php 
+			$user = DB::table('userinfo')->where('uid',$_SESSION['uid'])->first();
+	 	?>	      
+	        <li><a href="#">{{$user -> username}}</a></li>
 	        <li><a href="{{url('userSet')}}">个人设置</a></li>
 	        <li><a href="{{url('quit')}}">退 出</a></li>
 	      </ul>
@@ -64,8 +67,14 @@
 	    <a href="#" class="list-group-item">评 论</a>
 	    <a href="#" class="list-group-item">私 信</a>
 	    <a href="#" class="list-group-item">收 藏</a>
+	    <?php 
+	    	$group = DB::table('group')->where('uid',$_SESSION['uid'])->get();
+	     ?>
 	    <a href="javascript:;" class="list-group-item active">分 组</a>
-	    <a href="#" class="list-group-item">全 部</a>
+	    <a href="{{url('/')}}" class="list-group-item">全 部</a>
+	    @foreach($group as $v)	            				
+		<a href="{{url($v -> id)}}" class="list-group-item">{{$v -> name}}</a>					
+	    @endforeach	    
 	    <a href="#" class="btn" id="create_group">创建新分组</a>
 	  </div>
 	</div><!--/.sidebar-offcanvas-->
