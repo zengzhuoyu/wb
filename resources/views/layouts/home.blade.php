@@ -49,7 +49,7 @@
 		<?php 
 			$user = DB::table('userinfo')->where('uid',$_SESSION['uid'])->first();
 	 	?>	      
-	        <li><a href="#">{{$user -> username}}</a></li>
+	        <li><a href="{{url('userInfo/'.$_SESSION['uid'])}}">{{$user -> username}}</a></li>
 	        <li><a href="{{url('userSet')}}">个人设置</a></li>
 	        <li><a href="{{url('quit')}}">退 出</a></li>
 	      </ul>
@@ -98,6 +98,32 @@
 	    </div>
 	</div>
 	<!--==========创建分组==========-->
+
+	<div class="col-xs-6 col-sm-3 sidebar-offcanvas pull-right" id="sidebar" role="navigation">
+	<?php 
+		$field = ['username','face80 as face','follow','fans','wb','uid'];
+		$userinfo = DB::table('userinfo') -> where('uid',$_SESSION['uid']) -> select($field) -> first();
+	 ?>
+		<div class="row">
+			<div class="col-xs-6 text-right">
+				<a href="{{url('userInfo/'.$userinfo -> uid)}}"><img src="
+				@if($userinfo -> face)
+				{{$userinfo -> face}}
+				@else
+				bootstrap/img/noface.gif								
+				@endif
+				" alt="{{$userinfo -> username}}" width="80"></a>
+			</div>
+			<div class="col-xs-6">
+				<a href="{{url('userInfo/'.$userinfo -> uid)}}">{{$userinfo -> username}}</a>
+			</div>			
+		</div>
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<span>关注 {{$userinfo -> follow}}</span><span> 粉丝 {{$userinfo -> fans}}</span><span> <a href="{{url('userInfo/'.$userinfo -> uid)}}">微博</a> {{$userinfo -> wb}}</span>
+			</div>		
+		</div>		
+	</div>
 
 	@show
 

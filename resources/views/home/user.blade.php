@@ -19,7 +19,7 @@
 
         @parent
 
-        <div class="col-xs-12 col-sm-10">
+        <div class="col-xs-12 col-sm-7">
           <div class="row">
 
             <ul id="myTab" class="nav nav-tabs">
