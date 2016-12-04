@@ -12,6 +12,7 @@ use App\Http\Models\Picture;
 use App\Http\Models\Userinfo;
 use App\Http\Models\Follow;
 use App\Http\Models\Comment;
+use App\Http\Models\Keep;
 
 class IndexController extends Controller
 {
@@ -316,5 +317,31 @@ class IndexController extends Controller
 
 		return $str;
 
+	}	
+
+	/**
+	 * 收藏微博
+	 */
+	public function keep(Request $request){
+
+		$wid = $request->input('wid',0);
+		$uid = $_SESSION['uid'];
+
+		//检测用户是否已经收藏该微博
+		$where = ['wid' => $wid, 'uid' => $uid];
+		if (Keep::where($where) -> first()) return -1;
+			
+		//添加收藏
+		$data = [
+			'uid' => $uid,
+			'time' => time(),
+			'wid' => $wid
+		];
+
+		if(!Keep::insertGetId($data)) return 0;
+
+		//收藏成功时对该微博的收藏数+1
+		Wb::where('uid',$uid)->increment('keep');
+		return 1;
 	}	
 }

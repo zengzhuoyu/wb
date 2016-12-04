@@ -121,11 +121,14 @@
                 @endif                
                 <div style="clear:both;">
                     <div class="pull-left">{{time_format($v -> time)}}</div>
+                    <div class="pull-right">
+                        <span class="keep-up" style="display:none;"></span>
+                    </div>                    
                     <div class="pull-right"><span class="turn" id="{{$v -> id}}">转发</span>
                         @if($v -> turn)
                             ({{$v -> turn}})                                
                         @endif
-                     | 收藏
+                     | <span class="keep" wid="{{$v -> id}}">收藏</span>
                         @if($v -> keep)
                             ({{$v -> keep}})                                
                         @endif                  
@@ -142,6 +145,7 @@
                     <script>
                         var comment = "{{url('comment')}}";
                         var getComment = "{{url('getComment')}}";
+                        var keep = "{{url('keep')}}";
                     </script>
                     <div class='comment_load' style="display:none;">
                         <img src="bootstrap/img/loading.gif" alt="">评论加载中,请稍候...
@@ -223,11 +227,14 @@
 
                 <div style="clear:both;">
                     <div class="pull-left">{{time_format($v -> time)}}</div>
+                    <div class="pull-right">
+                        <span class="keep-up" style="display:none;"></span>
+                    </div>                    
                     <div class="pull-right"><span class="turn" id="{{$v -> id}}" tid="{{$v['isturn']['id']}}">转发</span>
                         @if($v -> turn)
                             ({{$v -> turn}})                                
                         @endif
-                     | 收藏
+                     | <span class="keep" wid="{{$v -> id}}">收藏</span>
                         @if($v -> keep)
                             ({{$v -> keep}})                                
                         @endif                  

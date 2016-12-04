@@ -333,4 +333,34 @@ $(function () {
 		});
 	});	
 
+	/**
+	 * 收藏微博
+	 */
+	$('.keep').click(function () {
+		var wid = $(this).attr('wid');
+		var keepUp = $(this).parent().prev().find('.keep-up');
+		var msg = '';
+
+		$.post(keep, {wid : wid,_token : token}, function (data) {
+			if (data == 1) {
+				msg = '收藏成功';
+			}
+
+			if (data == -1) {
+				msg = '已收藏';
+			}
+
+			if (data == 0) {
+				msg = '收藏失败';
+			}
+
+			keepUp.html(msg).fadeIn();
+			setTimeout(function () {
+				keepUp.fadeOut();
+			}, 3000);
+
+		}, 'json');
+		
+	});	
+
 });
