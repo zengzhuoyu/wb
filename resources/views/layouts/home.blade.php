@@ -45,10 +45,7 @@
 	        >
 	        <button type="submit" class="btn btn-success">搜 索</button>
 	      </form>
-	      <ul class="nav navbar-nav navbar-right">
-		<?php 
-			$user = DB::table('userinfo')->where('uid',$_SESSION['uid'])->first();
-	 	?>	      
+	      <ul class="nav navbar-nav navbar-right">      
 	        <li><a href="{{url('userInfo/'.$_SESSION['uid'])}}">{{$user -> username}}</a></li>
 	        <li><a href="{{url('userSet')}}">个人设置</a></li>
 	        <li><a href="{{url('quit')}}">退 出</a></li>
@@ -67,9 +64,6 @@
 	    <a href="#" class="list-group-item">评 论</a>
 	    <a href="#" class="list-group-item">私 信</a>
 	    <a href="#" class="list-group-item">收 藏</a>
-	    <?php 
-	    	$group = DB::table('group')->where('uid',$_SESSION['uid'])->get();
-	     ?>
 	    <a href="javascript:;" class="list-group-item active">分 组</a>
 	    <a href="{{url('/')}}" class="list-group-item">全 部</a>
 	    @foreach($group as $v)	            				
@@ -99,11 +93,31 @@
 	</div>
 	<!--==========创建分组==========-->
 
+	<!--==========加关注弹出框==========-->
+	    <script type='text/javascript'>
+	      var addFollow = "{{url('addFollow')}}";
+	      var getGroup = "{{url('getGroup')}}";
+	      var token = "{{csrf_token()}}";
+	    </script>
+	    <div id='follow'>
+	        <div class="follow_head">
+	            <span class='follow_text fleft'>关注好友</span>
+	        </div>
+	        <div class='sel-group'>
+	            <span>好友分组：</span>
+	            <select name="gid">
+	            </select>
+	        </div>
+	        <div class='fl-btn-wrap'>
+	            <input type="hidden" name='follow'/>
+	            <span class='add-follow-sub'>关注</span>
+	            <span class='follow-cencle'>取消</span>
+	        </div>
+	    </div>
+	<!--==========加关注弹出框==========-->   
+
 	<div class="col-xs-6 col-sm-3 sidebar-offcanvas pull-right" id="sidebar" role="navigation">
-	<?php 
-		$field = ['username','face80 as face','follow','fans','wb','uid'];
-		$userinfo = DB::table('userinfo') -> where('uid',$_SESSION['uid']) -> select($field) -> first();
-	 ?>
+
 		<div class="row">
 			<div class="col-xs-6 text-right">
 				<a href="{{url('userInfo/'.$userinfo -> uid)}}"><img src="
@@ -127,24 +141,6 @@
 		<hr>
 
 		<div class="row">
-			<?php 
-				$uid = $_SESSION['uid'];
-
-				$follow = DB::table('follow') -> where('fans',$uid) -> pluck('follow');
-
-				$friend = DB::table('follow')
-				            ->leftJoin('userinfo', 'follow.follow', '=', 'userinfo.uid')				
-					 ->select('userinfo.uid','userinfo.username','userinfo.face50 as face')        
-					 ->whereIn('follow.fans',$follow)
-					 ->whereNotIn('follow.follow', $follow)
-					 ->where('follow.follow', '<>', $uid)
-				            ->groupBy('follow.follow')
-				            // ->orderBy('time','desc')				            
-				            ->take(4)  	                     
-				            ->get();
-				            
-				// p($friend);				
-			 ?>
 			<div class="col-xs-12 text-center">
 				可能感兴趣的人
 			</div>
@@ -154,7 +150,7 @@
 		<div class="row">
 			<div class="col-xs-3 text-center">
 				<a href="{{url('userInfo/'.$v -> uid)}}"><img src="
-				@if($v ->face)
+				@if($v -> face)
 				{{$v -> face}}	
 				@else
 				bootstrap/img/noface.gif								
