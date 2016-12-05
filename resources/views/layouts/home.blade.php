@@ -122,7 +122,57 @@
 			<div class="col-xs-12 text-center">
 				<span>关注 {{$userinfo -> follow}}</span><span> 粉丝 {{$userinfo -> fans}}</span><span> <a href="{{url('userInfo/'.$userinfo -> uid)}}">微博</a> {{$userinfo -> wb}}</span>
 			</div>		
+		</div>
+
+		<hr>
+
+		<div class="row">
+			<?php 
+				$uid = $_SESSION['uid'];
+
+				$follow = DB::table('follow') -> where('fans',$uid) -> pluck('follow');
+
+				$friend = DB::table('follow')
+				            ->leftJoin('userinfo', 'follow.follow', '=', 'userinfo.uid')				
+					 ->select('userinfo.uid','userinfo.username','userinfo.face50 as face')        
+					 ->whereIn('follow.fans',$follow)
+					 ->whereNotIn('follow.follow', $follow)
+					 ->where('follow.follow', '<>', $uid)
+				            ->groupBy('follow.follow')
+				            // ->orderBy('time','desc')				            
+				            ->take(4)  	                     
+				            ->get();
+				            
+				// p($friend);				
+			 ?>
+			<div class="col-xs-12 text-center">
+				可能感兴趣的人
+			</div>
 		</div>		
+
+		@foreach($friend as $v)
+		<div class="row">
+			<div class="col-xs-3 text-center">
+				<a href="{{url('userInfo/'.$v -> uid)}}"><img src="
+				@if($v ->face)
+				{{$v -> face}}	
+				@else
+				bootstrap/img/noface.gif								
+				@endif
+				" alt="{{$v -> username}}" width="50" height="50"></a>
+			</div>
+			<div class="col-xs-5 text-center">
+				<div><a href="{{url('userInfo/'.$v -> uid)}}">{{$v -> username}}</a></div>
+				<br>
+				<div>共10个共同好友</div>
+			</div>
+			<div class="col-xs-4 text-center">
+				<button class="add-fl" uid="{{$v -> uid}}">+ 关注</button>
+			</div>						
+		</div>		
+		@endforeach	
+
+
 	</div>
 
 	@show

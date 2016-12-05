@@ -38,7 +38,13 @@
             <div class="row">
               
                 <div class="form-group col-lg-3">
-                    <img src="{{$v -> face180}}" alt="" width="100" height="100">
+                    <img src="
+                    @if($v -> face180)
+                      {{$v -> face180}}
+                    @else
+                      bootstrap/img/noface.gif        
+                    @endif                    
+                    " alt="" width="100" height="100">
                 </div>
 
                 <div class="form-group col-lg-3">
