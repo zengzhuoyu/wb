@@ -543,3 +543,15 @@ input,textarea,select,button{
   color:#2B96E1;
   cursor: pointer;  
 }
+
+/*用户个人信息*/
+.girl{
+  width:12px;
+  height:12px;
+  background:url(../img/icon.png) no-repeat -300px -26px;
+}
+.boy{
+  width:12px;
+  height:12px;
+  background:url(../img/icon.png) no-repeat -300px 0;
+}

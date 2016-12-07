@@ -6,7 +6,7 @@ $(function () {
 		$('#upload_img').show();
 	});
 
-	//显示图片上传框
+	//微博异步上传表单
 	$('#send_weibo').click(function(){
 
 	   	var content = $('textarea[name="content"]').val();
@@ -34,7 +34,10 @@ $(function () {
 	   					// $('input[name="max"]').val('');
 	   					// $('input[name="medium"]').val('');
 	   					// $('input[name="mini"]').val('');
-	   					setTimeout("location.reload()",2000);
+	   					setTimeout(function(){
+	   						$("body").scrollTop(0);
+							window.location.reload();
+	   					},2000);
 	   					// window.location.reload();
 	   				}else{
 	   					alert(data.msg);
@@ -292,6 +295,7 @@ $(function () {
 		$.post(comment, cons, function (data) {
 			if (data != 'false') {
 				if (cons.isturn) {//同时转发到我的微博
+					$("body").scrollTop(0);
 					window.location.reload();
 				} else {//只是评论
 					_textarea.val('');

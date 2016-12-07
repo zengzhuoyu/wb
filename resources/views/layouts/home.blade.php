@@ -18,7 +18,7 @@
 	<script src="{{asset('bootstrap/js/index.js')}}"></script>        		
 </head>
 <body>
-
+	<!-- 所有子模板都需要的 - 开始 -->
 	<!-- Fixed navbar -->
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 	  <div class="container">
@@ -53,7 +53,9 @@
 	    </div><!--/.nav-collapse -->
 	  </div>
 	</nav>        
+	<!-- 所有子模板都需要的 - 结束 -->
 
+	<!-- 有的子模板需要，有的不需要的 - 开始 -->
 	@section('content')
 
 	<div class="col-xs-6 col-sm-2 sidebar-offcanvas" id="sidebar" role="navigation">
@@ -172,6 +174,7 @@
 	</div>
 
 	@show
+	<!-- 有的子模板需要，有的不需要的 - 结束 -->
 
 	<footer class="text-center">
 	  <p>&copy; Company 2016</p>

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Models\Userinfo;
 use App\Http\Models\User;
+use App\Http\Models\Wb;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
@@ -27,7 +28,7 @@ class UserController extends Controller
     			-> select('username', 'truename', 'sex', 'location', 'constellation', 'intro', 'face180')
     			-> first();
 
-		return view('home/user')->with('user',$user);
+		return view('home/userset')->with('user',$user);
 	}
 
 	/**
@@ -159,6 +160,13 @@ class UserController extends Controller
 	//用户个人信息页
 	public function userInfo($id){
 
-		p($id);	
+		$userinfo = Userinfo::where('uid',$id)->first();
+
+		if(!$userinfo) return redirect('/');//这里应该是一个错误页面提示：用户不存在，正在为您跳转至首页
+
+		$uids = [$id];
+		$data = (new Wb) -> getWeibo($uids);
+
+		return view('home/userinfo') -> with('userinfo',$userinfo) -> with('id',$id) -> with('data',$data);
 	}	
 }

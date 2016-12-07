@@ -39,15 +39,7 @@ class IndexController extends Controller
 			}
 		}
 
-		$data = Wb::whereIn('wb.uid',$uids)
-			 ->select('wb.id','wb.content','wb.isturn','wb.time','wb.turn','wb.keep','wb.comment','wb.uid','userinfo.username','userinfo.face50 as face','picture.max','picture.medium','picture.mini')
-		            ->leftJoin('userinfo', 'wb.uid', '=', 'userinfo.uid')         
-		            ->leftJoin('picture', 'wb.id', '=', 'picture.wid')
-		            ->orderBy('time','desc')	    	                     
-		            ->paginate(10);
-
-		//重组结果集数组，得到转发微博
-		if($data) $data = (new Wb)->getTurn($data);
+		if($uids) $data = (new Wb) -> getWeibo($uids);
 
 		return view('home/index')->with('data',$data);
 	}
@@ -111,14 +103,6 @@ class IndexController extends Controller
 	}    
 
 	/**
-	 * 用户个人信息页显示
-	 */
-	public function userInfo($id){
-
-		p($id);
-	}
-
-	/**
 	 * 首页微博转发表达提交
 	 */
 	public function turn(Request $request){
@@ -169,7 +153,7 @@ class IndexController extends Controller
 		//用户发布微博数+1
 		Userinfo::where('uid',$uid)->increment('wb');	
 
-		return redirect('/');
+		return redirect($_SERVER['HTTP_REFERER']);
 	
 	}
 
@@ -229,9 +213,9 @@ class IndexController extends Controller
 		$str .= '<dt><a href="/userInfo/'. $uid .'">';
 		$str .= '<img src="';
 		if ($user -> face){
-			$str .= $user -> face;
+			$str .= '/'.$user -> face;
 		} else {
-			$str .= 'bootstrap/img/noface.gif';
+			$str .= '/bootstrap/img/noface.gif';
 		}
 		$str .= '" alt="' . $user -> username . '" width="30" height="30"/>';
         		$str .= '</a></dt><dd>';  
@@ -280,9 +264,9 @@ class IndexController extends Controller
 			$str .= '<dt><a href="/userInfo/'. $v -> uid .'">';
 			$str .= '<img src="';
 			if ($v -> face){
-				$str .= $v -> face;
+				$str .= '/'.$v -> face;
 			} else {
-				$str .= 'bootstrap/img/noface.gif';
+				$str .= '/bootstrap/img/noface.gif';
 			}
 			$str .= '" alt="' . $v -> username . '" width="30" height="30"/>';
 	        		$str .= '</a></dt><dd>';  
