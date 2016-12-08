@@ -4,8 +4,8 @@ namespace App\Http\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Http\Models\Userinfo;
-use App\Http\Models\Picture;
+// use App\Http\Models\Userinfo;
+// use App\Http\Models\Picture;
 
 class Wb extends Model
 {
