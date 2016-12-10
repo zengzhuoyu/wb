@@ -555,3 +555,8 @@ input,textarea,select,button{
   height:12px;
   background:url(../img/icon.png) no-repeat -300px 0;
 }
+
+/*首页、用户个人页 删除微博*/
+.del{
+  display:none; 
+}

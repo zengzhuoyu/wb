@@ -163,4 +163,6 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 	Route::get('/{gid}', 'IndexController@index')->where('gid', '[0-9]+');//首页自建分组 - 点击分组，相应微博显示在首页
 
 	Route::post('/keep', 'IndexController@keep');//首页收藏功能
+
+	Route::post('/delWeibo', 'IndexController@delWeibo');//首页、用户个人信息页功能
 });

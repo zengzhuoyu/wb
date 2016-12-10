@@ -367,4 +367,31 @@ $(function () {
 		
 	});	
 
+	/**
+	 * 删除微博
+	 */
+	$('.wb_main').hover(function () {
+		$(this).find('.del').show().css('color','#2B96E1').css('cursor','pointer');
+	}, function () {
+		$(this).find('.del').hide();
+	});	
+	$('.del').click(function () {
+		var wid = $(this).attr('wid');
+		var isDel = confirm('确认要删除该微博？');
+		var obj = $(this).parents('.wb_main');
+
+		if (isDel) {
+			$.post(delWeibo, {wid : wid,_token:token}, function (data) {
+				if (data) {
+					obj.slideUp('slow', function () {
+						obj.remove();
+						window.location.reload();
+					});
+				} else {
+					alert('删除失败请重试...');
+				}
+			}, 'json');
+		}
+	});	
+
 });

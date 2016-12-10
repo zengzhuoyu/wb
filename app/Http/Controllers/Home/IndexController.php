@@ -328,4 +328,53 @@ class IndexController extends Controller
 		Wb::where('uid',$uid)->increment('keep');
 		return 1;
 	}	
+
+	/**
+	 * 异步删除微博
+	 */
+	public function delWeibo(Request $request){
+
+		//获取删除微博ID
+		$wid = $request->input('wid',0);
+
+		if(!Wb::where('id',$wid) -> delete()) echo 0;
+
+		//如果删除的微博含有图片
+		$img = Picture::where('wid',$wid) -> first();
+
+		if($img){
+			Picture::where('wid',$wid) -> delete();
+
+			//删除图片文件
+			@unlink($img['mini']);			
+		}
+
+		//发布者的微博数量减一
+		Userinfo::where('uid',$_SESSION['uid']) -> decrement('wb');
+		//所有该微博下的评论都删除
+		Comment::where('wid',$wid) -> delete();
+		
+		echo 1;
+		// if (M('weibo')->delete($wid)) {
+		// 	//如果删除的微博含有图片
+		// 	$db = M('picture');
+		// 	$img = $db->where(array('wid' => $wid))->find();
+
+		// 	//对图片表记录进行删除
+		// 	if ($img) {
+		// 		$db->delete($img['id']);
+
+		// 		//删除图片文件
+		// 		@unlink('./Uploads/Pic/' . $img['mini']);
+		// 		@unlink('./Uploads/Pic/' . $img['medium']);
+		// 		@unlink('./Uploads/Pic/' . $img['max']);
+		// 	}
+		// 	M('userinfo')->where(array('uid' => session('uid')))->setDec('weibo');
+		// 	M('comment')->where(array('wid' => $wid))->delete();
+
+		// 	echo 1;
+		// } else {
+		// 	echo 0;
+		// }
+	}	
 }

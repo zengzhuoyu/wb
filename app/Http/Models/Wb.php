@@ -32,11 +32,12 @@ class Wb extends Model
 
     	foreach($data as $k => $v){
     		if($v -> isturn){
-    			$v -> isturn = $this->where('wb.id',$v -> isturn)
-                                    ->select('userinfo.username','wb.id','wb.content','wb.uid','wb.time','wb.turn','wb.comment','picture.max','picture.medium','picture.mini')
-                                    ->leftJoin('userinfo','wb.uid','=','userinfo.uid')
-                                    ->leftJoin('picture','wb.id','=','picture.wid')
-                                    ->first();
+                                $tmp = $this->where('wb.id',$v -> isturn)
+                                                                    ->select('userinfo.username','wb.id','wb.content','wb.uid','wb.time','wb.turn','wb.comment','picture.max','picture.medium','picture.mini')
+                                                                    ->leftJoin('userinfo','wb.uid','=','userinfo.uid')
+                                                                    ->leftJoin('picture','wb.id','=','picture.wid')
+                                                                    ->first();                
+    			$v -> isturn = $tmp ? $tmp : -1;
     		}
 
     	}

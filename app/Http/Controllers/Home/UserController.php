@@ -10,9 +10,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Models\Userinfo;
 use App\Http\Models\User;
 use App\Http\Models\Wb;
+use App\Http\Models\Follow;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
@@ -167,6 +169,37 @@ class UserController extends Controller
 		$uids = [$id];
 		$data = (new Wb) -> getWeibo($uids);
 
-		return view('home/userinfo') -> with('userinfo',$userinfo) -> with('id',$id) -> with('data',$data);
+		//我的关注
+		if (Cache::has('follow_' . $id)) {//判断缓存是否存在
+			$follow = Cache::get('follow_' . $id);//读取缓存
+		}else{
+			$follow = Follow::where('fans',$id) -> select('follow') -> get();
+			foreach($follow as $k => $v){
+				$follow[$k] = $v['follow'];
+			}
+			$follow = Userinfo::whereIn('uid',$follow) -> select('username','face50 as face','uid') -> take(8) -> get();
+
+			Cache::put('follow_' . $id, $follow, 60);//写入缓存	
+		}
+
+		//我的粉丝
+		if (Cache::has('fans_' . $id)) {
+			$fans = Cache::get('fans_' . $id);
+		}else{		
+			$fans = Follow::where('follow',$id) -> select('fans') -> get();
+			foreach($fans as $k => $v){
+				$fans[$k] = $v['fans'];
+			}
+			$fans = Userinfo::whereIn('uid',$fans) -> select('username','face50 as face','uid') -> take(8) -> get();
+
+			Cache::put('fans_' . $id, $fans, 60);
+		}
+
+		return view('home/userinfo')
+			 -> with('userinfo',$userinfo)
+			 -> with('id',$id)
+			 -> with('data',$data)
+			 -> with('follow',$follow)
+			 -> with('fans',$fans);
 	}	
 }

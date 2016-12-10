@@ -67,6 +67,7 @@
                         <script type="text/javascript">
                             var token = "{{csrf_token()}}";
                             var sendWeibo = "{{url('sendWeibo')}}";
+                            var delWeibo = "{{url('delWeibo')}}";
                             <?php $timestamp = time();?>
                             $(function() {
                                 $('#file_upload').uploadify({
@@ -147,7 +148,11 @@
                     <div class="pull-right">
                         <span class="keep-up" style="display:none;"></span>
                     </div>                    
-                    <div class="pull-right"><span class="turn" id="{{$v -> id}}">转发</span>
+                    <div class="pull-right">
+                       @if($_SESSION['uid'] == $v -> uid)
+                            <span class="del" wid="{{$v -> id}}">删除 |</span>                                  
+                        @endif
+                    <span class="turn" id="{{$v -> id}}">转发</span>
                         @if($v -> turn)
                             ({{$v -> turn}})                                
                         @endif
@@ -202,45 +207,53 @@
                 <div style="font-weight:bold;display:none;" class="author"><a href="{{url('userInfo/'.$v -> uid)}}">{{$v -> username}}</a></div>
                 <div class="content">{!! replace_weibo(str_replace('//','<span style="color:#ccc;font-weight: bold;">&nbsp;//&nbsp;</span>',$v -> content)) !!}</div>
 
-                <!-- 转发的原微博内容开始 -->
-                <div style="margin:20px;padding:20px;border:1px solid #eee;">
-                    <div style="font-weight:bold;" class="turn_name"><a href="{{url('userInfo/'.$v['isturn']['uid'])}}">{{$v['isturn']['username']}}</a></div>
-                    <div class="turn_cons">{!! replace_weibo($v['isturn']['content']) !!}</div>
-                    @if($v['isturn']['max'])                
-                        <div>
-                            <img src="{{'/'.$v['isturn']['mini']}}" alt="" width="50" height="50" class="mini_img">
-                            <div style="display:none;" class="img_tool">
-                                <ul style="list-style:none;">
-                                    <li class="packup">收 起</li>
-                                    <li><a href="{{'/'.$v['isturn']['max']}}" target="_blank">查看大图</a></li>
-                                </ul>
-                                <div class="img_info">
-                                    <img src="{{'/'.$v['isturn']['medium']}}" alt="" width="80" height="80">
+                @if($v -> isturn === -1)
+                    该微博已被删除
+                @else
+                    <!-- 转发的原微博内容开始 -->
+                    <div style="margin:20px;padding:20px;border:1px solid #eee;">
+                        <div style="font-weight:bold;" class="turn_name"><a href="{{url('userInfo/'.$v['isturn']['uid'])}}">{{$v['isturn']['username']}}</a></div>
+                        <div class="turn_cons">{!! replace_weibo($v['isturn']['content']) !!}</div>
+                        @if($v['isturn']['max'])                
+                            <div>
+                                <img src="{{'/'.$v['isturn']['mini']}}" alt="" width="50" height="50" class="mini_img">
+                                <div style="display:none;" class="img_tool">
+                                    <ul style="list-style:none;">
+                                        <li class="packup">收 起</li>
+                                        <li><a href="{{'/'.$v['isturn']['max']}}" target="_blank">查看大图</a></li>
+                                    </ul>
+                                    <div class="img_info">
+                                        <img src="{{'/'.$v['isturn']['medium']}}" alt="" width="80" height="80">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endif
-                    <div style="clear:both;">
-                        <div class="pull-left">{{time_format($v['isturn']['time'])}}</div>
-                        <div class="pull-right"><span class="" id="">转发</span>
-                        @if($v['isturn']['turn'])
-                            ({{$v['isturn']['turn']}})                                
-                        @endif                 
-                     | 评论
-                        @if($v['isturn']['comment'])
-                            ({{$v['isturn']['comment']}})                                
-                        @endif                            
-                        </div>
-                    </div>                    
-                </div>
-                <!-- 转发的原微博内容结束 -->
+                        @endif
+                        <div style="clear:both;">
+                            <div class="pull-left">{{time_format($v['isturn']['time'])}}</div>
+                            <div class="pull-right"><span class="" id="">转发</span>
+                            @if($v['isturn']['turn'])
+                                ({{$v['isturn']['turn']}})                                
+                            @endif                 
+                         | 评论
+                            @if($v['isturn']['comment'])
+                                ({{$v['isturn']['comment']}})                                
+                            @endif                            
+                            </div>
+                        </div>                    
+                    </div>
+                    <!-- 转发的原微博内容结束 -->
+                @endif
 
                 <div style="clear:both;">
                     <div class="pull-left">{{time_format($v -> time)}}</div>
                     <div class="pull-right">
                         <span class="keep-up" style="display:none;"></span>
                     </div>                    
-                    <div class="pull-right"><span class="turn" id="{{$v -> id}}" tid="{{$v['isturn']['id']}}">转发</span>
+                    <div class="pull-right">
+                       @if($_SESSION['uid'] == $v -> uid)
+                            <span class="del" wid="{{$v -> id}}">删除 |</span>                                  
+                        @endif 
+                    <span class="turn" id="{{$v -> id}}" tid="{{$v['isturn']['id']}}">转发</span>
                         @if($v -> turn)
                             ({{$v -> turn}})                                
                         @endif
@@ -293,8 +306,50 @@
 @else
 
     没有发布微博    
+    <hr>
 
 @endif
+
+        <div class="row">
+            <div class="col-xs-6 col-lg-6">
+                我的关注({{count($follow)}}) &nbsp;<a>更多>></a>
+            </div>
+        </div>
+        <div class="row">
+        @foreach($follow as $v)
+            <div class="col-xs-6 col-lg-1 text-center">
+                <div><a href="{{url('userInfo/'.$v -> uid)}}"><img src="
+                    @if($v -> face)
+                            {{'/'.$v -> face}}
+                    @else
+                         /bootstrap/img/noface.gif                           
+                    @endif
+                " alt="{{$v -> username}}" with="50" height="50"></a></div><br>
+                <div><a href="{{url('userInfo/'.$v -> uid)}}">{{$v -> username}}</a></div>
+            </div>
+        @endforeach
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6 col-lg-6">
+                我的粉丝({{count($fans)}}) &nbsp;<a>更多>></a>
+            </div>
+        </div>
+        <div class="row">
+        @foreach($fans as $v)
+            <div class="col-xs-6 col-lg-1 text-center">
+                <div><a href="{{url('userInfo/'.$v -> uid)}}"><img src="
+                    @if($v -> face)
+                            {{'/'.$v -> face}}
+                    @else
+                         /bootstrap/img/noface.gif                           
+                    @endif
+                " alt="{{$v -> username}}" with="50" height="50"></a></div><br>
+                <div><a href="{{url('userInfo/'.$v -> uid)}}">{{$v -> username}}</a></div>
+            </div>
+        @endforeach
+        </div>
+
 
         </div>
     <!--==========转发输入框==========-->
