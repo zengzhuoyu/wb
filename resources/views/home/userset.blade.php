@@ -5,10 +5,8 @@
 @endsection
 
 @section('script')
-  <script type='text/javascript'>
     var address = "{{$user -> location}}";
     var constellation = "{{$user -> constellation}}";
-  </script>
 @endsection
 
 @section('content')

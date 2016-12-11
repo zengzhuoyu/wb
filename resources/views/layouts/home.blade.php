@@ -9,8 +9,12 @@
 	<script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
 	<script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>	
 	<script src="{{asset('bootstrap/js/jquery.validate.min.js')}}"></script>	
-	<script src="{{asset('bootstrap/js/city.js')}}"></script>	
-	@yield('script')	
+	<script src="{{asset('bootstrap/js/city.js')}}"></script>
+	<script type="text/javascript">
+		@yield('script')
+		var delFollow = "{{url('delFollow')}}";
+		var _token = "{{csrf_token()}}";
+	</script>
            <script src="{{asset('org/uploadify/jquery.uploadify.min.js')}}" type="text/javascript"></script>
 	<script src="{{asset('bootstrap/js/edit.js')}}"></script>        		
 	<script src="{{asset('bootstrap/js/left.js')}}"></script>        		
@@ -124,7 +128,7 @@
 			<div class="col-xs-6 text-right">
 				<a href="{{url('userInfo/'.$userinfo -> uid)}}"><img src="
 				@if($userinfo -> face)
-				{{$userinfo -> face}}
+				{{'/'.$userinfo -> face}}
 				@else
 				bootstrap/img/noface.gif								
 				@endif
@@ -136,7 +140,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12 text-center">
-				<span>关注 {{$userinfo -> follow}}</span><span> 粉丝 {{$userinfo -> fans}}</span><span> <a href="{{url('userInfo/'.$userinfo -> uid)}}">微博</a> {{$userinfo -> wb}}</span>
+				<span>关注 <a href="{{url('follow/'.$userinfo -> uid)}}">{{$userinfo -> follow}}</a></span><span> 粉丝 <a href="{{url('fans/'.$userinfo -> uid)}}">{{$userinfo -> fans}}</a></span><span> 微博 <a href="{{url('userInfo/'.$userinfo -> uid)}}">{{$userinfo -> wb}}</a></span>
 			</div>		
 		</div>
 
@@ -153,7 +157,7 @@
 			<div class="col-xs-3 text-center">
 				<a href="{{url('userInfo/'.$v -> uid)}}"><img src="
 				@if($v -> face)
-				{{$v -> face}}	
+				{{'/'.$v -> face}}	
 				@else
 				bootstrap/img/noface.gif								
 				@endif

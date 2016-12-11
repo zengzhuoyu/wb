@@ -81,4 +81,33 @@ class CommonController extends Controller
 
 		return json_encode(['status' => 1, 'msg' => '关注成功','mutual' => 0]);	
 	}	
+
+	/**
+	 * 异步移除关注与粉丝
+	 */
+	public function delFollow(Request $request){
+
+		$id = $request->input('uid',0);
+		$type = $request->input('type',1);
+
+		if(!$request->isMethod('post')) return view('404');//定制错误页面
+
+		$uid = $_SESSION['uid'];
+
+		$where = $type ? ['follow' => $id, 'fans' => $uid] : ['follow' => $uid, 'fans' => $id];
+
+		if (!Follow::where($where) -> delete()) return 0;
+
+		if ($type) {
+			Userinfo::where('uid',$uid)->decrement('follow');
+			Userinfo::where('uid',$id)->decrement('fans');
+		} else {
+			Userinfo::where('uid',$uid)->decrement('fans');
+			Userinfo::where('uid',$id)->decrement('follow');
+		}
+
+		return 1;
+		
+	}
+
 }

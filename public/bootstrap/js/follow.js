@@ -42,9 +42,9 @@ $(function () {
                var obj = $('.add-fl[uid=' + follow + ']').parent();
                obj.find('.add-fl[uid=' + follow + ']').remove();
                if(data.mutual){
-                  obj.append('<span>互相关注</span> | <button>移除关注</button>');
+                  obj.after('<span>互相关注</span>');
                }else{
-                  obj.append('<span>√ 已关注</span> | <button>移除关注</button>');                  
+                  obj.after('<span>√ 已关注</span>');                  
                }
                $('#follow').hide();
                $('#follow-bg').remove();
@@ -134,5 +134,28 @@ $(function () {
          }, "slow").fadeOut();
       }, time * 1000);
    }
+
+   //移除关注与粉丝
+   $('.del-follow').click(function () {
+         var data = {
+            uid : $(this).attr('uid'),
+            type : $(this).attr('type') ? $(this).attr('type') : 1,
+            _token : token
+         };
+         var isDel = confirm('确认移除?');
+         var obj = $(this).parents('.follow-list');
+
+         if (isDel) {
+            $.post(delFollow, data, function (data) {
+               if (data) {
+                  obj.slideUp('slow', function () {
+                     obj.remove();
+                  })
+               } else {
+                  alert('移除失败请重试...');
+               }
+            }, 'json');
+         }
+   });
 
 });

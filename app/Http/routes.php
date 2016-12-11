@@ -165,4 +165,11 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 	Route::post('/keep', 'IndexController@keep');//首页收藏功能
 
 	Route::post('/delWeibo', 'IndexController@delWeibo');//首页、用户个人信息页功能
+
+	Route::get('/follow/{id}','UserController@follow')->where('id', '[0-9]+');//用户关注列表
+
+	Route::get('/fans/{id}','UserController@fans')->where('id', '[0-9]+');//用户粉丝列表
+
+	Route::post('/delFollow','CommonController@delFollow');//移除关注与粉丝
+
 });

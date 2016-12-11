@@ -35,7 +35,7 @@
             </div>
 
           @foreach($data as $v)
-            <div class="row">
+            <div class="row follow-list">
               
                 <div class="form-group col-lg-3">
                     <img src="
@@ -61,14 +61,12 @@
                 <div class="form-group col-lg-3 pull-right">
                   @if($v -> mutual)
                     <span>互相关注</span> |
-                    <button>移除关注</button>
-                  @elseif ($v -> followed)
+                     @elseif ($v -> followed)
                     <span>√ 已关注</span> |
-                    <button>移除关注</button>                    
                   @else
                     <button class="add-fl" uid="{{$v -> uid}}">+ 未关注</button>                  
                   @endif                  
-
+                    <button class="del-follow" uid="{{$v -> uid}}">移除</button> 
                 </div>             
 
             </div>

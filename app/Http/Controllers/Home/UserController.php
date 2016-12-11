@@ -202,4 +202,86 @@ class UserController extends Controller
 			 -> with('follow',$follow)
 			 -> with('fans',$fans);
 	}	
+
+	/**
+	 * 用户关注列表
+	 */
+	public function follow(Request $request,$id){
+
+		$type = 1;
+		$results = $this -> _ff($request,$id,$type);
+
+		if($results == 'false') return view('404');
+
+		return view('home/fflist')
+			->with('users',$results['users'])
+			->with('follow',$results['follow'])
+			->with('fans',$results['fans'])
+			->with('type',$type);
+
+	}
+
+	/**
+	 * 用户粉丝列表
+	 */
+	public function fans(Request $request,$id){
+
+		$type = 0;
+		$results = $this -> _ff($request,$id,$type);
+
+		if($results == 'false') return view('404');
+		
+		return view('home/fflist')
+			->with('users',$results['users'])
+			->with('follow',$results['follow'])
+			->with('fans',$results['fans'])
+			->with('type',$type);	
+	}		
+
+	private function _ff($request,$id,$type){
+
+		$user = User::where('id',$id) -> first();
+
+		//判断请求过来的方式
+		if(!$request->isMethod('get') || !$user) return 'false';//定制错误页面
+
+		$where = $type ? 'fans' : 'follow' ;
+		$field = $type ? 'follow' : 'fans' ;
+		$uids = Follow::where($where,$id) -> select($field) -> get();		
+
+		if($uids){
+
+			foreach ($uids as $k => $v) {
+				$uids[$k] = $v[$field];
+			}			
+
+			$field = ['face50 as face','username','sex','location','follow','fans','wb','uid'];
+
+			$users = Userinfo::whereIn('uid',$uids) -> select($field) -> paginate(10);
+		}	
+
+		$results['users'] = $users;
+
+		$uid = $_SESSION['uid'];
+
+		//当前登录用户的关注表
+		$follow = Follow::where('fans',$uid) -> select('follow') -> get() -> toArray();
+		if ($follow) {
+			foreach ($follow as $k => $v) {
+				$follow[$k] = $v['follow'];
+			}
+		}
+		$results['follow'] = $follow;
+
+		//当前登录用户的粉丝表
+		$fans = Follow::where('follow',$uid) -> select('fans') -> get() -> toArray();
+		if ($fans) {
+			foreach ($fans as $k => $v) {
+				$fans[$k] = $v['fans'];
+			}
+		}
+		$results['fans'] = $fans;	
+
+		return $results;	
+	}
 }

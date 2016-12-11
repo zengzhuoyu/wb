@@ -28,9 +28,9 @@
                   @endif                
                 " alt="" width="80px" height="80px">
                 <br><br>
-                <span>关注 {{$userinfo -> follow}} </span>
-                <span>粉丝 {{$userinfo -> fans}} </span>
-                <span>微博 {{$userinfo -> wb}}</span>
+                <span>关注 <a href="{{url('follow/'. $userinfo -> uid)}}">{{$userinfo -> follow}}</a> </span>
+                <span>粉丝 <a href="{{url('fans/'. $userinfo -> uid)}}">{{$userinfo -> fans}}</a> </span>
+                <span>微博 <a href="{{url('userInfo/'. $userinfo -> uid)}}">{{$userinfo -> wb}}</a></span>
               </div>
              <div class="col-lg-9">
                 <div>{{$userinfo -> username}}</div><br>

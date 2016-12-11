@@ -355,26 +355,5 @@ class IndexController extends Controller
 		Comment::where('wid',$wid) -> delete();
 		
 		echo 1;
-		// if (M('weibo')->delete($wid)) {
-		// 	//如果删除的微博含有图片
-		// 	$db = M('picture');
-		// 	$img = $db->where(array('wid' => $wid))->find();
-
-		// 	//对图片表记录进行删除
-		// 	if ($img) {
-		// 		$db->delete($img['id']);
-
-		// 		//删除图片文件
-		// 		@unlink('./Uploads/Pic/' . $img['mini']);
-		// 		@unlink('./Uploads/Pic/' . $img['medium']);
-		// 		@unlink('./Uploads/Pic/' . $img['max']);
-		// 	}
-		// 	M('userinfo')->where(array('uid' => session('uid')))->setDec('weibo');
-		// 	M('comment')->where(array('wid' => $wid))->delete();
-
-		// 	echo 1;
-		// } else {
-		// 	echo 0;
-		// }
 	}	
 }
