@@ -11,6 +11,7 @@ use App\Http\Models\Userinfo;
 use App\Http\Models\User;
 use App\Http\Models\Wb;
 use App\Http\Models\Follow;
+use App\Http\Models\Keep;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
@@ -283,5 +284,26 @@ class UserController extends Controller
 		$results['fans'] = $fans;	
 
 		return $results;	
+	}
+
+	/**
+	 * 我的收藏列表
+	 */
+	public function keep(){
+
+		$uid = $_SESSION['uid'];
+
+		$data = Keep::where('keep.uid',$uid)
+			 ->select('keep.id as kid','keep.time as ktime','wb.id','wb.content','wb.isturn','wb.time','wb.turn','wb.comment','wb.uid','picture.mini', 'picture.medium', 'picture.max','userinfo.username', 'userinfo.face50 as face')
+		            ->leftJoin('wb', 'keep.wid', '=', 'wb.id')         
+		            ->leftJoin('picture', 'wb.id', '=', 'picture.wid')	
+		            ->leftJoin('userinfo', 'wb.uid', '=', 'userinfo.uid')		            	            
+		            ->orderBy('ktime','desc')	    	                  
+		            ->paginate(10);
+
+		if($data) $data = (new Wb) -> getTurn($data);
+
+		return view('home/keeplist') -> with('data',$data);	            
+
 	}
 }

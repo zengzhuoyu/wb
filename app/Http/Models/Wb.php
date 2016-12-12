@@ -22,14 +22,14 @@ class Wb extends Model
                     ->orderBy('time','desc')                              
                     ->paginate(10);
 
-        if($data) $this -> _getTurn($data);
+        if($data) $this -> getTurn($data);
 
         return $data;       
     }
 
     //重组结果集数组，得到转发微博
-    private function _getTurn($data){
-
+    public function getTurn($data){
+        // p($data);
     	foreach($data as $k => $v){
     		if($v -> isturn){
                                 $tmp = $this->where('wb.id',$v -> isturn)

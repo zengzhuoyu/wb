@@ -172,4 +172,6 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 
 	Route::post('/delFollow','CommonController@delFollow');//移除关注与粉丝
 
+	Route::get('/keep','UserController@keep');//我的收藏列表
+
 });

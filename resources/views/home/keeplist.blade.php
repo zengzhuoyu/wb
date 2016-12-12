@@ -1,7 +1,7 @@
 @extends('layouts.home')
 
 @section('title')
-  <title>微 博</title>
+  <title>收 藏</title>
 @endsection
 
 @section('content')
@@ -13,72 +13,14 @@
         @parent
         
         <div class="col-xs-12 col-sm-7">
-        
-          <div class="row">
 
-            <div class="col-xs-6 col-lg-11 text-right">
-              <textarea cols="60" rows="5" name="content"></textarea>
-            </div>          
-          
-          </div>
+        <div class="row">
+            
+            <div class="col-xs-6 col-lg-12 text-center">
+                - - 收 藏 - -    
+            </div>            
 
-            <div class="row">
-
-              <div class="col-xs-6 col-lg-3">
-              </div>   
-              <div class="col-xs-6 col-lg-1">
-                <div class="emotion"></div>              
-              </div>                 
-              <div class="col-xs-6 col-lg-1">
-                <div class="icon-picture"></div> 
-                <!--图片上传框-->
-                    <div id="upload_img" style='display:none;'>
-                        <div class='upload-title'><p>本地上传</p><span class='close'></span></div>
-                        <input id="file_upload" name="file_upload" type="file" multiple="true">         
-                        <script type="text/javascript">
-                            var token = "{{csrf_token()}}";
-                            var sendWeibo = "{{url('sendWeibo')}}";
-                            var delWeibo = "{{url('delWeibo')}}";
-                            <?php $timestamp = time();?>
-                            $(function() {
-                                $('#file_upload').uploadify({
-                                    'buttonText' : '图片上传',
-                                    'formData'     : {
-                                        'type' : 'Weibo',
-                                        'timestamp' : '<?php echo $timestamp;?>',
-                                        '_token'     : "{{csrf_token()}}"
-                                    },
-                                    'swf'      : "{{asset('org/uploadify/uploadify.swf')}}",
-                                    'uploader' : "{{url('/uploadFace')}}",
-                                    'onUploadSuccess' : function(file, data, response) {
-                                      $('#pic-show').fadeIn().find('img').attr('src', data);
-                                      $('input[name=max]').val(data);
-                                      $('input[name=medium]').val(data);
-                                      $('input[name=mini]').val(data);                                    
-                                    }
-                                });
-                            });
-                        </script>      
-                        <style>
-                            .uploadify{display:inline-block;}
-                            .uploadify-button{border:none; border-radius:5px; margin-top:8px;margin-left:35px;}
-                            table.add_tab tr td span.uploadify-button-text{color: #FFF; margin:0;}
-                        </style>                             
-                    </div>
-                <!--图片上传框-->
-                <div id='pic-show' style="display:none;">
-                    <img src="" alt="" width="180" height="180"/>
-                    <input type="hidden" name='max' value=''/>
-                    <input type="hidden" name='medium' value=''/>
-                    <input type="hidden" name='mini' value=''/>                    
-                </div>                                           
-              </div>               
-              <div class="col-xs-6 col-lg-6 text-right">
-                <button id="send_weibo">发 布</button>
-              </div>
-                                      
-          </div>
-
+        </div>
 @if(count($data) > 0)
 
 @foreach($data as $v)

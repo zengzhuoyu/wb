@@ -13,6 +13,7 @@
 	<script type="text/javascript">
 		@yield('script')
 		var delFollow = "{{url('delFollow')}}";
+                      var keep = "{{url('keep')}}";		
 		var _token = "{{csrf_token()}}";
 	</script>
            <script src="{{asset('org/uploadify/jquery.uploadify.min.js')}}" type="text/javascript"></script>
@@ -69,7 +70,7 @@
 	    <a href="#" class="list-group-item">提到我的</a>
 	    <a href="#" class="list-group-item">评 论</a>
 	    <a href="#" class="list-group-item">私 信</a>
-	    <a href="#" class="list-group-item">收 藏</a>
+	    <a href="{{url('keep')}}" class="list-group-item">收 藏</a>
 	    <a href="javascript:;" class="list-group-item active">分 组</a>
 	    <a href="{{url('/')}}" class="list-group-item">全 部</a>
 	    @foreach($group as $v)	            				
