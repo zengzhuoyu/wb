@@ -176,4 +176,16 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 
 	Route::post('/cancelKeep','UserController@cancelKeep');//我的收藏列表:异步取消收藏
 
+	Route::get('/letter','UserController@letter');//我的私信列表
+
+	Route::post('/letterSend','UserController@letterSend');//我的私信列表：发送私信表单提交
+
+	Route::post('/delLetter','UserController@delLetter');//我的私信列表：私信删除
+
+	Route::get('/comment','UserController@comment');//我的评论列表
+
+	Route::post('/reply','UserController@reply');//我的评论列表：回复表单提交
+
+	Route::post('/delComment','UserController@delComment');//我的评论列表：回复删除
+
 });

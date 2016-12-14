@@ -12,6 +12,8 @@ use App\Http\Models\User;
 use App\Http\Models\Wb;
 use App\Http\Models\Follow;
 use App\Http\Models\Keep;
+use App\Http\Models\Letter;
+use App\Http\Models\Comment;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
@@ -320,6 +322,116 @@ class UserController extends Controller
 		if (!$kid || !$wid || !$wb || !Keep::where('id',$kid) -> delete()) return 0;
 
 		Wb::where('id',$wid) -> decrement('keep');
+
+		return 1;
+	}	
+
+	/**
+	 * 我的私信列表
+	 */
+	public function letter(){
+
+		$uid = $_SESSION['uid'];
+
+		// set_msg($uid, 2, true);
+		
+		$data = Letter::where('letter.uid',$uid)
+			 ->select('letter.id','letter.content','letter.time','userinfo.username','userinfo.face50 as face','userinfo.uid')
+		            ->leftJoin('userinfo', 'letter.from', '=', 'userinfo.uid')         	            	            
+		            ->orderBy('time','desc')	    	                  
+		            ->paginate(10);
+
+		return view('home/letter') -> with('data',$data);
+	}
+
+	/**
+	 * 私信发送表单处理
+	 */
+	public function letterSend(Request $request){
+
+		$name = $request->input('name','');
+		$content = $request->input('content','');
+
+		$user = Userinfo::where('username',$name)-> select('uid') -> first();
+
+		if (!$user) return back() -> with('errors','该用户不存在');
+			
+		$data = [
+			'from' => $_SESSION['uid'],
+			'content' => $content,
+			'time' => time(),
+			'uid' => $user -> uid
+			];
+
+		if (!Letter::insertGetId($data)) return back() -> with('errors','发送失败请重试...');
+
+		// set_msg($uid, 2);
+
+		return back() -> with('errors','信息已发送');
+	}	
+
+	/**
+	 * 异步删除私信
+	 */
+	public function delLetter(Request $request){
+
+		$lid = (int) $request->input('lid',0);
+
+		if (!Letter::where('id',$lid) -> delete()) return 0;
+		
+		return 1;
+
+	}	
+
+	/**
+	 * 评论列表
+	 */
+	public function comment(){
+
+		// set_msg(session('uid'), 1, true);
+
+		$data = Comment::where('comment.uid',$_SESSION['uid'])
+			 ->select('comment.id','comment.content','comment.wid','comment.time','userinfo.username','userinfo.face50 as face','userinfo.uid')
+		            ->leftJoin('userinfo', 'comment.uid', '=', 'userinfo.uid')         
+		            ->orderBy('time','desc')	    	                  
+		            ->paginate(10);
+		
+		return view('home/comment') -> with('data',$data);
+	}	
+
+	/**
+	 * 评论回复
+	 */
+	public function reply(Request $request){
+
+		$wid = (int) $request->input('wid',0);
+		$content = $request->input('content','');
+
+		$data = [
+			'content' => $content,
+			'time' => time(),
+			'uid' => $_SESSION['uid'],
+			'wid' => $wid
+			];
+
+		if(!Comment::insertGetId($data)) return 0;
+
+		Wb::where('id',$wid) -> increment('comment');
+
+		return 1;
+	}	
+
+	/**
+	 * 删除评论
+	 */
+	public function delComment(Request $request){
+
+		$cid = (int) $request->input('cid',0);
+		$wid = (int) $request->input('wid',0);
+
+		if (!Comment::where('id',$cid) -> delete()) return 0;
+
+		Wb::where('id',$wid)->decrement('comment');
 
 		return 1;
 	}	

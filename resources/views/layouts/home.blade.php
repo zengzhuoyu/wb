@@ -15,6 +15,9 @@
 		var delFollow = "{{url('delFollow')}}";
                       var keep = "{{url('keep')}}";		
                       var cancelKeep = "{{url('cancelKeep')}}";		
+                      var delLetter = "{{url('delLetter')}}";		
+                      var reply = "{{url('reply')}}";		
+                      var delComment = "{{url('delComment')}}";		
 		var _token = "{{csrf_token()}}";
 	</script>
            <script src="{{asset('org/uploadify/jquery.uploadify.min.js')}}" type="text/javascript"></script>
@@ -22,6 +25,8 @@
 	<script src="{{asset('bootstrap/js/left.js')}}"></script>        		
 	<script src="{{asset('bootstrap/js/follow.js')}}"></script>        		
 	<script src="{{asset('bootstrap/js/index.js')}}"></script>        		
+	<script src="{{asset('bootstrap/js/letter.js')}}"></script>        		
+	<script src="{{asset('bootstrap/js/comment.js')}}"></script>        		
 </head>
 <body>
 	<!-- 所有子模板都需要的 - 开始 -->
@@ -69,8 +74,8 @@
 	    <!-- <a href="#" class="list-group-item active">Link</a> -->
 	    <a href="{{url('/')}}" class="list-group-item">首 页</a>
 	    <a href="#" class="list-group-item">提到我的</a>
-	    <a href="#" class="list-group-item">评 论</a>
-	    <a href="#" class="list-group-item">私 信</a>
+	    <a href="{{url('comment')}}" class="list-group-item">评 论</a>
+	    <a href="{{url('letter')}}" class="list-group-item">私 信</a>
 	    <a href="{{url('keep')}}" class="list-group-item">收 藏</a>
 	    <a href="javascript:;" class="list-group-item active">分 组</a>
 	    <a href="{{url('/')}}" class="list-group-item">全 部</a>
