@@ -174,4 +174,6 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 
 	Route::get('/keep','UserController@keep');//我的收藏列表
 
+	Route::post('/cancelKeep','UserController@cancelKeep');//我的收藏列表:异步取消收藏
+
 });

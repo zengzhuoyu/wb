@@ -14,6 +14,7 @@
 		@yield('script')
 		var delFollow = "{{url('delFollow')}}";
                       var keep = "{{url('keep')}}";		
+                      var cancelKeep = "{{url('cancelKeep')}}";		
 		var _token = "{{csrf_token()}}";
 	</script>
            <script src="{{asset('org/uploadify/jquery.uploadify.min.js')}}" type="text/javascript"></script>

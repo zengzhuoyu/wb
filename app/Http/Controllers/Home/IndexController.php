@@ -325,7 +325,7 @@ class IndexController extends Controller
 		if(!Keep::insertGetId($data)) return 0;
 
 		//收藏成功时对该微博的收藏数+1
-		Wb::where('uid',$uid)->increment('keep');
+		Wb::where('id',$wid)->increment('keep');
 		return 1;
 	}	
 

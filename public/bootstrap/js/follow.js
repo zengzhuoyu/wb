@@ -158,4 +158,29 @@ $(function () {
          }
    });
 
+   /**
+    * 取消收藏
+    */
+   $('.cancel-keep').click(function () {
+      var isCancel = confirm('确认取消该微博的收藏？');
+      var data = {
+         kid : $(this).attr('kid'),
+         wid : $(this).attr('wid'),
+         _token : token
+      };
+      var obj = $(this).parents('.wb_main');
+
+      if (isCancel) {
+         $.post(cancelKeep, data, function (data) {
+            if (data) {
+               obj.slideUp('slow', function () {
+                  obj.remove();
+               });
+            } else {
+               alert('取消失败，请重试...');
+            }
+         }, 'json');
+      }
+   });   
+
 });

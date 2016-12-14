@@ -303,7 +303,24 @@ class UserController extends Controller
 
 		if($data) $data = (new Wb) -> getTurn($data);
 
-		return view('home/keeplist') -> with('data',$data);	            
+		return view('home/atkeeplist') -> with('data',$data);	            
 
 	}
+
+	/**
+	 * 异步取消收藏
+	 */
+	public function cancelKeep(Request $request){
+
+		$kid = (int) $request->input('kid',0);
+		$wid = (int) $request->input('wid',0);
+
+		$wb = Wb::where('id',$wid) -> first();
+
+		if (!$kid || !$wid || !$wb || !Keep::where('id',$kid) -> delete()) return 0;
+
+		Wb::where('id',$wid) -> decrement('keep');
+
+		return 1;
+	}	
 }

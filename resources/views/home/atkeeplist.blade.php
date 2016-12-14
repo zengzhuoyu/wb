@@ -28,7 +28,7 @@
     @if(!$v -> isturn)
 
         <!-- 普通样式 -->
-          <div class="row">
+          <div class="row wb_main">
 
             <div class="col-xs-6 col-lg-1">
             </div>          
@@ -43,7 +43,7 @@
             </div>             
             <div class="col-xs-6 col-lg-1">
             </div>       
-            <div class="col-xs-6 col-lg-9 wb_main">
+            <div class="col-xs-6 col-lg-9">
                 <div style="font-weight:bold;" class="author">
                     <a href="{{url('userInfo/'.$v -> uid)}}">{{$v -> username}}</a>
                 </div>
@@ -68,17 +68,19 @@
                         <span class="keep-up" style="display:none;"></span>
                     </div>                    
                     <div class="pull-right">
-                        @if($_SESSION['uid'] == $v -> uid)
-                            <span class="del" wid="{{$v -> id}}">删除 |</span>                                  
-                        @endif 
+                        @if(isset($v -> kid))
+                            <span>收藏于：{{date('y-m-d H:i:s',$v -> ktime)}} |</span>                                  
+                        @endif  
                     <span class="turn" id="{{$v -> id}}">转发</span>
                         @if($v -> turn)
                             ({{$v -> turn}})                                
                         @endif
-                     | <span class="keep" wid="{{$v -> id}}">收藏</span>
-                        @if($v -> keep)
-                            ({{$v -> keep}})                                
-                        @endif                  
+                     | 
+                    @if(isset($v -> kid))
+                        <span class="cancel-keep" wid="{{$v -> id}}" kid="{{$v -> kid}}">取消收藏</span>
+                    @else
+                        <span class="keep" wid="{{$v -> id}}">收藏</span>                                                    
+                    @endif
                      | <span class="comment" wid="{{$v -> id}}">评论</span>
                         @if($v -> comment)
                             ({{$v -> comment}})                                
@@ -119,7 +121,7 @@
     @else
 
         <!-- 转发样式 -->
-          <div class="row">
+          <div class="row wb_main">
 
             <div class="col-xs-6 col-lg-1">
             </div>          
@@ -134,7 +136,7 @@
             </div>             
             <div class="col-xs-6 col-lg-1">
             </div>       
-            <div class="col-xs-6 col-lg-9 wb_main">
+            <div class="col-xs-6 col-lg-9">
                 <div style="font-weight:bold;" class="author"><a href="{{url('userInfo/'.$v -> uid)}}">{{$v -> username}}</a></div>
                 <div class="content">{!! replace_weibo(str_replace('//','<span style="color:#ccc;font-weight: bold;">&nbsp;//&nbsp;</span>',$v -> content)) !!}</div>
 
@@ -181,17 +183,19 @@
                         <span class="keep-up" style="display:none;"></span>
                     </div>                    
                     <div class="pull-right">
-                        @if($_SESSION['uid'] == $v -> uid)
-                            <span class="del" wid="{{$v -> id}}">删除 |</span>                                  
+                        @if(isset($v -> kid))
+                            <span>收藏于：{{date('y-m-d H:i:s',$v -> ktime)}} |</span>                                  
                         @endif                    
                       <span class="turn" id="{{$v -> id}}" tid="{{$v['isturn']['id']}}">转发</span>
                         @if($v -> turn)
                             ({{$v -> turn}})                                
                         @endif
-                     | <span class="keep" wid="{{$v -> id}}">收藏</span>
-                        @if($v -> keep)
-                            ({{$v -> keep}})                                
-                        @endif                  
+                     | 
+                    @if(isset($v -> kid))
+                        <span class="cancel-keep" wid="{{$v -> id}}" kid="{{$v -> kid}}">取消收藏</span>
+                    @else
+                        <span class="keep" wid="{{$v -> id}}">收藏</span>                                                    
+                    @endif                                     
                      | <span class="comment" wid="{{$v -> id}}">评论</span>
                         @if($v -> comment)
                             ({{$v -> comment}})                                
@@ -236,7 +240,7 @@
 
 @else
 
-    没有发布微博    
+    没有微博    
 
 @endif
 
