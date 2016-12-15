@@ -190,4 +190,8 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 
 	Route::post('/delComment','UserController@delComment');//我的评论列表：回复删除
 
+	Route::get('/searchWeibo', 'SearchController@searchWeibo');//搜索：微博
+
+	Route::get('/atme', 'UserController@atme');//提到我的列表
+
 });

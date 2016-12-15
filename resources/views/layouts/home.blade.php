@@ -48,13 +48,35 @@
 	        <li><a href="#about">About</a></li>
 	        <li><a href="#contact">Contact</a></li>
 	      </ul>      
-	      <form class="navbar-form navbar-left" method="get" action="{{url('searchUser')}}">
-	        <input type="text" class="form-control" placeholder="搜索微博、找人" name="k"
+	      <form class="navbar-form navbar-left" method="get" action="
+		@if(isset($type))
+			/searchWeibo
+		@else
+			/searchUser							
+		@endif
+	      " name="search">
+	        <input type="text" class="form-control" placeholder="找人、微博" name="k"
 		@if(isset($k) && !empty($k))
 			value="{{$k}}"										
 		@endif
 	        >
-	        <button type="submit" class="btn btn-success">搜 索</button>
+	       <ul class="list-inline" style="display:inline-block;">
+	       	<li class="
+		@if(isset($type))
+			click
+		@else
+			cur					
+		@endif
+	       	sech-type" url="/searchUser">找人</li>
+	       	<li class="
+		@if(isset($type))
+			cur
+		@else
+			click				
+		@endif
+	       	sech-type" url="/searchWeibo">微博</li>
+	       </ul>
+	        <button type="submit" class="btn btn-success btn-sm">搜 索</button>
 	      </form>
 	      <ul class="nav navbar-nav navbar-right">      
 	        <li><a href="{{url('userInfo/'.$_SESSION['uid'])}}">{{$user -> username}}</a></li>
@@ -73,7 +95,7 @@
 	  <div class="list-group">
 	    <!-- <a href="#" class="list-group-item active">Link</a> -->
 	    <a href="{{url('/')}}" class="list-group-item">首 页</a>
-	    <a href="#" class="list-group-item">提到我的</a>
+	    <a href="/atme" class="list-group-item">提到我的</a>
 	    <a href="{{url('comment')}}" class="list-group-item">评 论</a>
 	    <a href="{{url('letter')}}" class="list-group-item">私 信</a>
 	    <a href="{{url('keep')}}" class="list-group-item">收 藏</a>

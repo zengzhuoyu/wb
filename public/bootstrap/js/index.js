@@ -96,6 +96,11 @@ $(function () {
 	 	var author = $.trim(orgObj.find('.author').html());
 	 	var content = orgObj.find('.content').html();
 
+ 		// 替换掉其中的描红的内容 <font style="color:red;">*</font>
+ 		var regi = /<font style="color:red;">/g;
+ 		var regii = /<\/font>/g;
+ 		content = content.replace(regi,'').replace(regii,'');
+
 	 	$('.turn-cname').html(author);//同时评论给谁
 
 	 	//tid 被转载的原微博的id
@@ -104,6 +109,7 @@ $(function () {
 	 	if(tid){
 	 		//获取转发者的信息，拼成字符串放进输入框里	
 	 		var cons = replace_weibo(' // @' + author + ' : ' + content);
+
 	 		$('form[name=turn] textarea').val(cons);	
 	 		 		
 	 		// 转发的原微博内容
@@ -393,5 +399,13 @@ $(function () {
 			}, 'json');
 		}
 	});	
+
+	//搜索切换
+	$('.sech-type').click(function () {
+		$('.cur').removeClass('cur').addClass('click');
+		$(this).removeClass('click').addClass('cur');
+		$('form[name=search]').attr('action', $(this).attr('url'));
+	});
+
 
 });

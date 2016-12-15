@@ -14,6 +14,7 @@ use App\Http\Models\Follow;
 use App\Http\Models\Keep;
 use App\Http\Models\Letter;
 use App\Http\Models\Comment;
+use App\Http\Models\Atme;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
@@ -439,4 +440,34 @@ class UserController extends Controller
 
 		return 1;
 	}	
+
+
+	/**
+	 * @提到我的
+	 */
+	public function atme(){
+		// set_msg(session('uid'), 3, true);
+
+		$wids = Atme::where('uid',$_SESSION['uid']) -> select('wid') -> get();
+
+		if ($wids){
+			foreach ($wids as $k => $v) {
+				$wids[$k] = $v['wid'];
+			}
+		}
+
+        		$data = Wb::whereIn('wb.id',$wids)//whereIn 使用的值必须是一个索引数组
+	                    ->select('wb.id','wb.content','wb.isturn','wb.time','wb.turn','wb.keep','wb.comment','wb.uid','userinfo.username','userinfo.face50 as face','picture.max','picture.medium','picture.mini')
+	                    ->leftJoin('userinfo', 'wb.uid', '=', 'userinfo.uid')         
+	                    ->leftJoin('picture', 'wb.id', '=', 'picture.wid')
+	                    ->orderBy('time','desc')                              
+	                    ->paginate(10);
+
+		if($data) $data = (new Wb) -> getTurn($data);
+
+		$atme = 1;
+		
+		return view('home/atkeeplist') -> with('atme',$atme) -> with('data',$data);
+	}
+
 }

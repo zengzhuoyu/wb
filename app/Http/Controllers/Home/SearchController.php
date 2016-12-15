@@ -10,9 +10,35 @@ use App\Http\Controllers\Controller;
 use App\Http\Models\Userinfo;
 use App\Http\Models\Follow;
 use App\Http\Models\Group;
+use App\Http\Models\Wb;
 
 class SearchController extends Controller
 {
+	/**
+	 * 搜索微博
+	 */
+	public function searchWeibo(Request $request){
+
+		$k = $request->input('k','');
+		
+		$data = null;
+
+		if ($k) {
+
+			$data = Wb::where('content','like','%'.$k.'%')
+		                    ->select('wb.id','wb.content','wb.isturn','wb.time','wb.turn','wb.keep','wb.comment','wb.uid','userinfo.username','userinfo.face50 as face','picture.max','picture.medium','picture.mini')
+		                    ->leftJoin('userinfo', 'wb.uid', '=', 'userinfo.uid')         
+		                    ->leftJoin('picture', 'wb.id', '=', 'picture.wid')
+		                    ->orderBy('time','desc')                              
+		                    ->paginate(10);
+		}
+
+		if($data) $data = (new Wb) -> getTurn($data);
+
+		$type = 1;//菜单栏搜索微博而不是找人的标记
+		return view('home/searchweibo',compact('k','data','type'));	
+	}
+
 	/**
 	 * 搜索找人
 	 * 检索出除自己外呢称含有关键字的用户

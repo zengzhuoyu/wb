@@ -1,13 +1,7 @@
 @extends('layouts.home')
 
 @section('title')
-  <title>
-    @if(isset($atme))
-        提到我的
-    @else
-        收 藏            
-    @endif      
-  </title>
+  <title>搜索微博</title>
 @endsection
 
 @section('content')
@@ -20,27 +14,20 @@
         
         <div class="col-xs-12 col-sm-7">
 
-        <div class="row">
-            
-            <div class="col-xs-6 col-lg-12 text-center">
-                - - 
-                @if(isset($atme))
-                    提到我的
-                @else
-                    收 藏            
-                @endif  
-                - -    
-            </div>            
-
-        </div>
 @if(count($data) > 0)
+
+            <div class="row text-center">
+                <div class="form-group col-lg-10">
+                 共搜出<font style="color:red;"> {{count($data)}} </font>条数据              
+                </div>
+            </div>
 
 @foreach($data as $v)
 
     @if(!$v -> isturn)
 
         <!-- 普通样式 -->
-          <div class="row wb_main">
+          <div class="row">
 
             <div class="col-xs-6 col-lg-1">
             </div>          
@@ -55,11 +42,11 @@
             </div>             
             <div class="col-xs-6 col-lg-1">
             </div>       
-            <div class="col-xs-6 col-lg-9">
+            <div class="col-xs-6 col-lg-9 wb_main">
                 <div style="font-weight:bold;" class="author">
                     <a href="{{url('userInfo/'.$v -> uid)}}">{{$v -> username}}</a>
                 </div>
-                <div class="content">{!! replace_weibo($v -> content) !!}</div>
+                <div class="content">{!! replace_weibo(str_replace($k,"<font style='color:red;'>$k</font>",$v -> content)) !!}</div>
                 @if($v -> max)                
                     <div>
                         <img src="{{$v -> mini}}" alt="" width="50" height="50" class="mini_img">
@@ -80,19 +67,17 @@
                         <span class="keep-up" style="display:none;"></span>
                     </div>                    
                     <div class="pull-right">
-                        @if(isset($v -> kid))
-                            <span>{{date('y-m-d H:i:s',$v -> ktime)}} |</span>                                  
-                        @endif  
+                        @if($_SESSION['uid'] == $v -> uid)
+                            <span class="del" wid="{{$v -> id}}">删除 |</span>                                  
+                        @endif 
                     <span class="turn" id="{{$v -> id}}">转发</span>
                         @if($v -> turn)
                             ({{$v -> turn}})                                
                         @endif
-                     | 
-                    @if(isset($v -> kid))
-                        <span class="cancel-keep" wid="{{$v -> id}}" kid="{{$v -> kid}}">取消收藏</span>
-                    @else
-                        <span class="keep" wid="{{$v -> id}}">收藏</span>                                                    
-                    @endif
+                     | <span class="keep" wid="{{$v -> id}}">收藏</span>
+                        @if($v -> keep)
+                            ({{$v -> keep}})                                
+                        @endif                  
                      | <span class="comment" wid="{{$v -> id}}">评论</span>
                         @if($v -> comment)
                             ({{$v -> comment}})                                
@@ -133,7 +118,7 @@
     @else
 
         <!-- 转发样式 -->
-          <div class="row wb_main">
+          <div class="row">
 
             <div class="col-xs-6 col-lg-1">
             </div>          
@@ -148,9 +133,9 @@
             </div>             
             <div class="col-xs-6 col-lg-1">
             </div>       
-            <div class="col-xs-6 col-lg-9">
+            <div class="col-xs-6 col-lg-9 wb_main">
                 <div style="font-weight:bold;" class="author"><a href="{{url('userInfo/'.$v -> uid)}}">{{$v -> username}}</a></div>
-                <div class="content">{!! replace_weibo(str_replace('//','<span style="color:#ccc;font-weight: bold;">&nbsp;//&nbsp;</span>',$v -> content)) !!}</div>
+                <div class="content">{!! str_replace($k,"<font style='color:red;'>$k</font>",replace_weibo(str_replace('//','<span style="color:#ccc;font-weight: bold;">&nbsp;//&nbsp;</span>',$v -> content))) !!}</div>
 
                 @if($v -> isturn === -1)
                     该微博已被删除
@@ -195,19 +180,17 @@
                         <span class="keep-up" style="display:none;"></span>
                     </div>                    
                     <div class="pull-right">
-                        @if(isset($v -> kid))
-                            <span>{{date('y-m-d H:i:s',$v -> ktime)}} |</span>                                  
+                        @if($_SESSION['uid'] == $v -> uid)
+                            <span class="del" wid="{{$v -> id}}">删除 |</span>                                  
                         @endif                    
                       <span class="turn" id="{{$v -> id}}" tid="{{$v['isturn']['id']}}">转发</span>
                         @if($v -> turn)
                             ({{$v -> turn}})                                
                         @endif
-                     | 
-                    @if(isset($v -> kid))
-                        <span class="cancel-keep" wid="{{$v -> id}}" kid="{{$v -> kid}}">取消收藏</span>
-                    @else
-                        <span class="keep" wid="{{$v -> id}}">收藏</span>                                                    
-                    @endif                                     
+                     | <span class="keep" wid="{{$v -> id}}">收藏</span>
+                        @if($v -> keep)
+                            ({{$v -> keep}})                                
+                        @endif                  
                      | <span class="comment" wid="{{$v -> id}}">评论</span>
                         @if($v -> comment)
                             ({{$v -> comment}})                                
@@ -251,8 +234,13 @@
         </div>
 
 @else
-
-    没有微博    
+            @if(isset($k) && !empty($k))
+                <div class="row text-center">
+                    <div class="form-group col-lg-10">
+                      未找到与<font style="color:red;"> {{$k}} </font>相关的微博
+                    </div>
+                </div>                   
+            @endif
 
 @endif
 

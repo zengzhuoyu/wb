@@ -13,6 +13,7 @@ use App\Http\Models\Userinfo;
 use App\Http\Models\Follow;
 use App\Http\Models\Comment;
 use App\Http\Models\Keep;
+use App\Http\Models\Atme;
 
 class IndexController extends Controller
 {
@@ -98,9 +99,38 @@ class IndexController extends Controller
 
 		Userinfo::where('uid',$uid)->increment('wb');
 
+		//处理@用户
+		$this -> _atmeHandel($content,$wid);
+
 		return json_encode(['status' => 1, 'msg' => '发布成功']);			
 
 	}    
+
+	/**
+	 * @用户处理
+	 */
+	private function _atmeHandel($content,$wid){
+
+		$preg = '/@(\S+?)\s/is';
+		preg_match_all($preg, $content, $arr);
+
+		if (!empty($arr[1])) {
+
+			foreach ($arr[1] as $v) {
+				$user = Userinfo::where('username',$v) -> select('uid') -> first();
+				if ($user) {
+					$data = [
+						'wid' => $wid,
+						'uid' => $user -> uid
+					];
+
+					//写入消息推送
+					// set_msg($uid, 3);
+					Atme::insert($data);
+				}
+			}
+		}
+	}
 
 	/**
 	 * 首页微博转发表达提交
@@ -130,7 +160,8 @@ class IndexController extends Controller
 		// $wid = Wb::insertGetId($data);
 
 		//这里并不是用到ajax返回，return返回语句需要修改
-		if(!Wb::insertGetId($data)) return json_encode(['status' => 0, 'msg' => '转发失败,请稍后重试']);
+		$wid = Wb::insertGetId($data);
+		if(!$wid) return json_encode(['status' => 0, 'msg' => '转发失败,请稍后重试']);
 
 		if ($tid) Wb::where('id',$tid)->increment('turn');
 			
@@ -153,6 +184,9 @@ class IndexController extends Controller
 		//用户发布微博数+1
 		Userinfo::where('uid',$uid)->increment('wb');	
 
+		//处理@用户
+		$this -> _atmeHandel($content,$wid);
+		
 		return redirect($_SERVER['HTTP_REFERER']);
 	
 	}

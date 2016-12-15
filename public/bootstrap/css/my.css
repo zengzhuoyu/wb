@@ -685,3 +685,11 @@ input,textarea,select,button{
   border-radius: 3px;
   cursor: pointer;
 }
+
+/*搜索微博、找人*/
+.cur{
+  color: #7CD000;  
+}
+.click{
+  cursor: pointer;
+}
