@@ -163,11 +163,15 @@ class UserController extends Controller
 	}
 
 	//用户个人信息页
-	public function userInfo($id){
+	public function userInfo($user){
 
-		$userinfo = Userinfo::where('uid',$id)->first();
+		$userinfo = Userinfo::where('uid',$user)->first();//用户id过来
+		if(!$userinfo){
+			$userinfo = Userinfo::where('username',$user)->first();//用户名过来
 
-		if(!$userinfo) return redirect('/');//这里应该是一个错误页面提示：用户不存在，正在为您跳转至首页
+			if(!$userinfo) return redirect('/');//这里应该是一个错误页面提示：用户不存在，正在为您跳转至首页
+		}
+		$id = $userinfo -> uid;
 
 		$uids = [$id];
 		$data = (new Wb) -> getWeibo($uids);
