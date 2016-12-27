@@ -108,6 +108,55 @@ function replace_weibo($content){
 	return $content;
 }
 
+/**
+ * 往redis写入推送消息
+ * @param [int] $uid  [用户ID号]
+ * @param [int] $type [1：评论；2：私信；3：@用户]
+ * @param [boolean] $flush  [是否清0] 清0表示已经查看过了
+ */
+
+function set_msg ($uid, $type, $flush = false) {
+	$name = '';
+	switch ($type) {
+		case 1 :
+			$name = 'comment';
+			break;
+
+		case 2 : 
+			$name = 'letter';
+			break;
+
+		case 3 : 
+			$name = 'atme';
+			break;
+	}
+
+	if ($flush) {
+		$data = Cache::get('usermsg' . $uid);
+		$data[$name]['total'] = 0;
+		$data[$name]['status'] = 0;
+		Cache::forever('usermsg' . $uid, $data);
+		return;
+	}
+
+	if (Cache::has('usermsg' . $uid)) {//redis中数据已存时让相应数据+1
+
+		$data = Cache::get('usermsg' . $uid);
+
+	} else {//redis中数据不存在时，初始化用户数据并写入到redis
+
+		$data = [
+			'comment' => ['total' => 0, 'status' => 0],
+			'letter' => ['total' =>0, 'status' => 0],
+			'atme' => ['total' => 0, 'status' => 0],
+		];
+	}
+	
+	$data[$name]['total']++;
+	$data[$name]['status'] = 1;
+	Cache::forever('usermsg' . $uid, $data);
+	
+}
 
 /**
  * 前台
@@ -193,5 +242,8 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 	Route::get('/searchWeibo', 'SearchController@searchWeibo');//搜索：微博
 
 	Route::get('/atme', 'UserController@atme');//提到我的列表
+
+	// Route::get('getMsg', 'CommonController@getMsg');//异步轮询推送消息
+	Route::get('/getMsg', 'CommonController@getMsg');//异步轮询推送消息
 
 });

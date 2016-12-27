@@ -13,11 +13,12 @@
 	<script type="text/javascript">
 		@yield('script')
 		var delFollow = "{{url('delFollow')}}";
-                      var keep = "{{url('keep')}}";		
-                      var cancelKeep = "{{url('cancelKeep')}}";		
-                      var delLetter = "{{url('delLetter')}}";		
-                      var reply = "{{url('reply')}}";		
-                      var delComment = "{{url('delComment')}}";		
+                  var keep = "{{url('keep')}}";		
+                  var cancelKeep = "{{url('cancelKeep')}}";		
+                  var delLetter = "{{url('delLetter')}}";		
+                  var reply = "{{url('reply')}}";		
+                  var delComment = "{{url('delComment')}}";
+                  var getMsgUrl = "getMsg";		
 		var _token = "{{csrf_token()}}";
 	</script>
            <script src="{{asset('org/uploadify/jquery.uploadify.min.js')}}" type="text/javascript"></script>
@@ -80,8 +81,26 @@
 	      </form>
 	      <ul class="nav navbar-nav navbar-right">      
 	        <li><a href="{{url('userInfo/'.$_SESSION['uid'])}}">{{$user -> username}}</a></li>
-	        <li><a href="{{url('userSet')}}">个人设置</a></li>
+	        <li><a href="{{url('userSet')}}">个人设置</a></li>       
 	        <li><a href="{{url('quit')}}">退 出</a></li>
+
+                	<!--信息推送-->
+                <li id='news' style='display:none;'>
+                    <a href=""><i class='icon icon-news'></i></a>
+                    <ul>
+                        <li class='news_comment' style="display:none;">
+                            <a href="comment"></a>
+                        </li>
+                        <li class='news_letter' style="display:none;">
+                            <a href="letter"></a>
+                        </li>
+                        <li class='news_atme' style="display:none;">
+                            <a href="atme"></a>
+                        </li>
+                    </ul>
+                </li>
+                	<!--信息推送-->	 
+
 	      </ul>
 	    </div><!--/.nav-collapse -->
 	  </div>

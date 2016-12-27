@@ -15,6 +15,8 @@ use App\Http\Models\Comment;
 use App\Http\Models\Keep;
 use App\Http\Models\Atme;
 
+use Illuminate\Support\Facades\Cache;
+
 class IndexController extends Controller
 {
 	public function index($gid = 0){
@@ -39,6 +41,8 @@ class IndexController extends Controller
 				$uids[] = $v['follow'];
 			}
 		}
+
+		// set_msg(2,1);
 
 		if($uids) $data = (new Wb) -> getWeibo($uids);
 
@@ -125,7 +129,8 @@ class IndexController extends Controller
 					];
 
 					//写入消息推送
-					// set_msg($uid, 3);
+					set_msg($user->uid, 3);
+					
 					Atme::insert($data);
 				}
 			}
@@ -260,6 +265,9 @@ class IndexController extends Controller
         		$str .= '<a href="">回复</a>';
 		$str .= '</div></dd></dl>';
 		
+		//写入消息推送
+		set_msg($uid, 1);		
+
 		return $str;
 
 	}	

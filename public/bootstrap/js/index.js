@@ -48,34 +48,6 @@ $(function () {
 	   	}		
 	});	
 
-	/**操作成功效果**/
-	function showTips(tips,time,height){
-	  var windowWidth = $(window).width();height=height?height:$(window).height();
-	  time = time ? time : 1;
-	  var tipsDiv = '<div class="tipsClass">' + tips + '</div>';
-	  $( 'body' ).append( tipsDiv );
-	  $( 'div.tipsClass' ).css({
-	     'top' : height/2 + 'px',
-	     'left' : ( windowWidth / 2 ) - 100 + 'px',
-	     'position' : 'absolute',
-	     'padding' : '3px 5px',
-	     'background': '#670768',
-	     'font-size' : 14 + 'px',
-	     'text-align': 'center',
-	     'width' : '300px',
-	     'height' : '40px',
-	     'line-height' : '40px',
-	     'color' : '#fff',
-	     'font-weight' : 'bold',
-	     'opacity' : '0.8'
-	  }).show();
-	  setTimeout( function(){
-	     $( 'div.tipsClass' ).animate({
-	        top: height/2-50+'px'
-	     }, "slow").fadeOut();
-	  }, time * 1000);
-	}	
-
 	$('.mini_img').click(function () {
 		$(this).hide().next().show();
 	});
@@ -155,24 +127,6 @@ $(function () {
 	 	});
 	 });
 	drag($('#turn'), $('.turn_text'));  //拖拽转发框	
-	
-	/**
-	 * 创建全屏透明背景层
-	 * @param   id
-	 */
-	function createBg (id) {
-		$('<div id = "' + id + '"></div>').appendTo('body').css({
-	 		'width' : $(document).width(),
-	 		'height' : $(document).height(),
-	 		'position' : 'absolute',
-	 		'top' : 0,
-	 		'left' : 0,
-	 		'z-index' : 2,
-	 		'opacity' : 0.3,
-	 		'filter' : 'Alpha(Opacity = 30)',
-	 		'backgroundColor' : '#000'
-	 	});
-	}
 
 	/**
 	 * 替换微博内容，去除 <a> 链接与表情图片
@@ -187,35 +141,6 @@ $(function () {
 
 		return content.replace(/<span.*?>\&nbsp;(\/\/)\&nbsp;<\/span>/ig, '$1');
 	}	
-
-	/**
-	* 元素拖拽
-	* @param  obj		拖拽的对象
-	* @param  element 	触发拖拽的对象
-	*/
-	function drag (obj, element) {
-		var DX, DY, moving;
-		element.mousedown(function (event) {
-			DX = event.pageX - parseInt(obj.css('left'));	//鼠标距离事件源宽度
-			DY = event.pageY - parseInt(obj.css('top'));	//鼠标距离事件源高度
-			moving = true;	//记录拖拽状态
-		});
-		$(document).mousemove(function (event) {
-			if (!moving) return;
-			var OX = event.pageX, OY = event.pageY;	//移动时鼠标当前 X、Y 位置
-			var	OW = obj.outerWidth(), OH = obj.outerHeight();	//拖拽对象宽、高
-			var DW = $(window).width(), DH = $('body').height();  //页面宽、高
-			var left, top;	//计算定位宽、高
-			left = OX - DX < 0 ? 0 : OX - DX > DW - OW ? DW - OW : OX - DX;
-			top = OY - DY < 0 ? 0 : OY - DY > DH - OH ? DH - OH : OY - DY;
-			obj.css({
-				'left' : left + 'px',
-				'top' : top + 'px'
-			});
-		}).mouseup(function () {
-			moving = false;	//鼠标抬起消取拖拽状态
-		});
-	}
 
 	/**
 	 * 点击评论，出现评论框
@@ -407,5 +332,137 @@ $(function () {
 		$('form[name=search]').attr('action', $(this).attr('url'));
 	});
 
-
+	//消息推送回调函数
+	get_msg(getMsgUrl);
 });
+
+/********************效果函数********************/
+
+/**
+ * 异步轮询函数
+ */
+function get_msg (url) {
+
+	$.getJSON(url, function (data) {
+		if (data.status) {
+
+		   news({
+				"total" : data.total,
+				"type" : data.type
+		   });
+		}
+		setTimeout(function () {
+			get_msg(url);
+		}, 5000);
+	});
+}
+
+/**
+ * 推送的新消息
+ * @param  {[type]} json {total:新消息的条数,type:（1：评论，2：私信，3：@我）}
+ * @return {[type]}      [description]
+ */
+var flags = true;//一打开该页面才启动的一个开关
+function news (json) {
+	switch (json.type) {
+		case 1:
+			$('#news ul .news_comment').show().find('a').html(json.total + '条新评论');
+			break;
+		case 2:
+			$('#news ul .news_letter').show().find('a').html(json.total + '条新私信');
+			break;
+		case 3:
+			$('#news ul .news_atme').show().find('a').html(json.total + '条@提到我');
+			break;
+	}
+	var obj = $('#news');
+	var icon = obj.find('i');
+	obj.show().find('li').hover(function () {  //下拉项添加效果
+		$(this).css('background', '#DCDCDC');
+	}, function () {
+		$(this).css('background', 'none');
+	}).click(function () {
+		clearInterval(newsGlint);
+	});
+	if (flags) {
+		flags = false;
+		var newsGlint = setInterval(function () {
+			icon.toggleClass("icon-news");
+		}, 500);
+	}
+}
+
+/**
+* 元素拖拽
+* @param  obj		拖拽的对象
+* @param  element 	触发拖拽的对象
+*/
+function drag (obj, element) {
+	var DX, DY, moving;
+	element.mousedown(function (event) {
+		DX = event.pageX - parseInt(obj.css('left'));	//鼠标距离事件源宽度
+		DY = event.pageY - parseInt(obj.css('top'));	//鼠标距离事件源高度
+		moving = true;	//记录拖拽状态
+	});
+	$(document).mousemove(function (event) {
+		if (!moving) return;
+		var OX = event.pageX, OY = event.pageY;	//移动时鼠标当前 X、Y 位置
+		var	OW = obj.outerWidth(), OH = obj.outerHeight();	//拖拽对象宽、高
+		var DW = $(window).width(), DH = $('body').height();  //页面宽、高
+		var left, top;	//计算定位宽、高
+		left = OX - DX < 0 ? 0 : OX - DX > DW - OW ? DW - OW : OX - DX;
+		top = OY - DY < 0 ? 0 : OY - DY > DH - OH ? DH - OH : OY - DY;
+		obj.css({
+			'left' : left + 'px',
+			'top' : top + 'px'
+		});
+	}).mouseup(function () {
+		moving = false;	//鼠标抬起消取拖拽状态
+	});
+}
+
+/**
+ * 创建全屏透明背景层
+ * @param   id
+ */
+function createBg (id) {
+	$('<div id = "' + id + '"></div>').appendTo('body').css({
+ 		'width' : $(document).width(),
+ 		'height' : $(document).height(),
+ 		'position' : 'absolute',
+ 		'top' : 0,
+ 		'left' : 0,
+ 		'z-index' : 2,
+ 		'opacity' : 0.3,
+ 		'filter' : 'Alpha(Opacity = 30)',
+ 		'backgroundColor' : '#000'
+ 	});
+}
+
+/**操作成功效果**/
+function showTips(tips,time,height){
+  var windowWidth = $(window).width();height=height?height:$(window).height();
+  time = time ? time : 1;
+  var tipsDiv = '<div class="tipsClass">' + tips + '</div>';
+  $( 'body' ).append( tipsDiv );
+  $( 'div.tipsClass' ).css({
+     'top' : height/2 + 'px',
+     'left' : ( windowWidth / 2 ) - 100 + 'px',
+     'position' : 'absolute',
+     'padding' : '3px 5px',
+     'background': '#670768',
+     'font-size' : 14 + 'px',
+     'text-align': 'center',
+     'width' : '300px',
+     'height' : '40px',
+     'line-height' : '40px',
+     'color' : '#fff',
+     'font-weight' : 'bold',
+     'opacity' : '0.8'
+  }).show();
+  setTimeout( function(){
+     $( 'div.tipsClass' ).animate({
+        top: height/2-50+'px'
+     }, "slow").fadeOut();
+  }, time * 1000);
+}	

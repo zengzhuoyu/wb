@@ -21,24 +21,24 @@ $(function () {
 	});
 
 	//所在地默认选项
-	address = address.split(' ');
-	$('select[name=province]').val(address[0]);
-	$.each(city, function (i, k) {//city是一个变量对象
-		if (k.name == address[0]) {
-			var str = '';
-			for (var j in k.child) {
-				str += '<option value="' + k.child[j] + '" ';
-				if (k.child[j] == address[1]) {
-					str += 'selected="selected"';
-				}
-				str += '>' + k.child[j] + '</option>';
-			}
-			$('select[name=city]').html(str);
-		}
-	});
+	// address = address.split(' ');
+	// $('select[name=province]').val(address[0]);
+	// $.each(city, function (i, k) {//city是一个变量对象
+	// 	if (k.name == address[0]) {
+	// 		var str = '';
+	// 		for (var j in k.child) {
+	// 			str += '<option value="' + k.child[j] + '" ';
+	// 			if (k.child[j] == address[1]) {
+	// 				str += 'selected="selected"';
+	// 			}
+	// 			str += '>' + k.child[j] + '</option>';
+	// 		}
+	// 		$('select[name=city]').html(str);
+	// 	}
+	// });
 
 	//星座默认选项
-	$('select[name=night]').val(constellation);
+	// $('select[name=night]').val(constellation);
 
 	//jQuery Validate 表单验证
 

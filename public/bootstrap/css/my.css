@@ -693,3 +693,13 @@ input,textarea,select,button{
 .click{
   cursor: pointer;
 }
+
+/*异步轮询推送消息*/
+.icon{
+  display:inline-block;
+  background:url(../img/icon.png);
+}
+.icon-news{
+  width:12px;
+  height:12px;
+}

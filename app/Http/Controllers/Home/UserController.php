@@ -338,7 +338,8 @@ class UserController extends Controller
 
 		$uid = $_SESSION['uid'];
 
-		// set_msg($uid, 2, true);
+		//写入消息推送
+		set_msg($uid, 2, true);
 		
 		$data = Letter::where('letter.uid',$uid)
 			 ->select('letter.id','letter.content','letter.time','userinfo.username','userinfo.face50 as face','userinfo.uid')
@@ -370,7 +371,8 @@ class UserController extends Controller
 
 		if (!Letter::insertGetId($data)) return back() -> with('errors','发送失败请重试...');
 
-		// set_msg($uid, 2);
+		//写入消息推送
+		set_msg($user -> uid, 2);
 
 		return back() -> with('errors','信息已发送');
 	}	
@@ -393,7 +395,8 @@ class UserController extends Controller
 	 */
 	public function comment(){
 
-		// set_msg(session('uid'), 1, true);
+		//写入消息推送
+		set_msg($_SESSION['uid'], 1, true);
 
 		$data = Comment::where('comment.uid',$_SESSION['uid'])
 			 ->select('comment.id','comment.content','comment.wid','comment.time','userinfo.username','userinfo.face50 as face','userinfo.uid')
@@ -446,7 +449,9 @@ class UserController extends Controller
 	 * @提到我的
 	 */
 	public function atme(){
-		// set_msg(session('uid'), 3, true);
+
+		//写入消息推送
+		set_msg($_SESSION['uid'], 3, true);
 
 		$wids = Atme::where('uid',$_SESSION['uid']) -> select('wid') -> get();
 

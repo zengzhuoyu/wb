@@ -11,6 +11,8 @@ use App\Http\Models\Group;
 use App\Http\Models\Follow;
 use App\Http\Models\Userinfo;
 
+use Illuminate\Support\Facades\Cache;
+
 class CommonController extends Controller
 {
 	//图片上传
@@ -108,6 +110,63 @@ class CommonController extends Controller
 
 		return 1;
 		
+	}
+
+	/**
+	 * 异步轮询推送消息
+	 */
+	public function getMsg(){
+
+		//75节内容
+		// $arr = [
+		// 	'status' => 1,
+		// 	'total' => 2,
+		// 	'type' => 3
+		// ];
+		// return json_encode($arr);
+		
+		//76节
+		$uid = $_SESSION['uid'];
+
+		$msg = Cache::get('usermsg' . $uid);
+
+		if(!$msg) return json_encode(['status' => 0]);
+
+		// 评论
+		if($msg['comment']['status']){
+			$msg['comment']['status'] = 0;
+			Cache::forever('usermsg' . $uid, $msg);
+
+			return json_encode([
+				'status' => 1,
+				'total' => $msg['comment']['total'],
+				'type' => 1
+			]);
+		}
+
+		// 私信
+		if($msg['letter']['status']){
+			$msg['letter']['status'] = 0;
+			Cache::forever('usermsg' . $uid, $msg);
+
+			return json_encode([
+				'status' => 1,
+				'total' => $msg['letter']['total'],
+				'type' => 2
+			]);
+		}
+
+		// @我
+		if($msg['atme']['status']){
+			$msg['atme']['status'] = 0;
+			Cache::forever('usermsg' . $uid, $msg);
+
+			return json_encode([
+				'status' => 1,
+				'total' => $msg['atme']['total'],
+				'type' => 3
+			]);
+		}				
 	}
 
 }
