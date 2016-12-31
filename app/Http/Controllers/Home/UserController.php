@@ -338,7 +338,7 @@ class UserController extends Controller
 
 		$uid = $_SESSION['uid'];
 
-		//写入消息推送
+		//消息推送 - 清0
 		set_msg($uid, 2, true);
 		
 		$data = Letter::where('letter.uid',$uid)
@@ -395,7 +395,7 @@ class UserController extends Controller
 	 */
 	public function comment(){
 
-		//写入消息推送
+		//消息推送 - 清0
 		set_msg($_SESSION['uid'], 1, true);
 
 		$data = Comment::where('comment.uid',$_SESSION['uid'])
@@ -450,7 +450,7 @@ class UserController extends Controller
 	 */
 	public function atme(){
 
-		//写入消息推送
+		//消息推送 - 清0
 		set_msg($_SESSION['uid'], 3, true);
 
 		$wids = Atme::where('uid',$_SESSION['uid']) -> select('wid') -> get();

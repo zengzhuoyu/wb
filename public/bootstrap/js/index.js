@@ -333,7 +333,10 @@ $(function () {
 	});
 
 	//消息推送回调函数
-	get_msg(getMsgUrl);
+	// get_msg(getMsgUrl);
+	setInterval(function () {
+		get_msg(getMsgUrl);
+	}, 5000);	
 });
 
 /********************效果函数********************/
@@ -341,19 +344,19 @@ $(function () {
 /**
  * 异步轮询函数
  */
-function get_msg (url) {
+function get_msg(url){
 
-	$.getJSON(url, function (data) {
+	$.getJSON(url, function(data){
 		if (data.status) {
 
-		   news({
+		   	news({
 				"total" : data.total,
 				"type" : data.type
-		   });
+		   	});
 		}
-		setTimeout(function () {
-			get_msg(url);
-		}, 5000);
+		// setTimeout(function () {
+		// 	get_msg(url);
+		// }, 5000);
 	});
 }
 
@@ -364,19 +367,22 @@ function get_msg (url) {
  */
 var flags = true;//一打开该页面才启动的一个开关
 function news (json) {
+
 	switch (json.type) {
 		case 1:
-			$('#news ul .news_comment').show().find('a').html(json.total + '条新评论');
+			$('#news ul .news_comment').show().find('a').html(json.total + ' 条新评论');
 			break;
 		case 2:
-			$('#news ul .news_letter').show().find('a').html(json.total + '条新私信');
+			$('#news ul .news_letter').show().find('a').html(json.total + ' 条新私信');
 			break;
 		case 3:
-			$('#news ul .news_atme').show().find('a').html(json.total + '条@提到我');
+			$('#news ul .news_atme').show().find('a').html(json.total + ' 条@提到我');
 			break;
 	}
+
 	var obj = $('#news');
 	var icon = obj.find('i');
+
 	obj.show().find('li').hover(function () {  //下拉项添加效果
 		$(this).css('background', '#DCDCDC');
 	}, function () {
@@ -384,6 +390,7 @@ function news (json) {
 	}).click(function () {
 		clearInterval(newsGlint);
 	});
+
 	if (flags) {
 		flags = false;
 		var newsGlint = setInterval(function () {

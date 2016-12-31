@@ -132,6 +132,8 @@ class CommonController extends Controller
 
 		if(!$msg) return json_encode(['status' => 0]);
 
+		// dd($msg);
+
 		// 评论
 		if($msg['comment']['status']){
 			$msg['comment']['status'] = 0;

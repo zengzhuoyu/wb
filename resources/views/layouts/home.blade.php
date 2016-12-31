@@ -21,7 +21,7 @@
                   var getMsgUrl = "getMsg";		
 		var _token = "{{csrf_token()}}";
 	</script>
-           <script src="{{asset('org/uploadify/jquery.uploadify.min.js')}}" type="text/javascript"></script>
+         <script src="{{asset('org/uploadify/jquery.uploadify.min.js')}}" type="text/javascript"></script>
 	<script src="{{asset('bootstrap/js/edit.js')}}"></script>        		
 	<script src="{{asset('bootstrap/js/left.js')}}"></script>        		
 	<script src="{{asset('bootstrap/js/follow.js')}}"></script>        		
