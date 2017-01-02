@@ -247,3 +247,17 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
 	Route::get('/getMsg', 'CommonController@getMsg');//异步轮询推送消息
 
 });
+
+/**
+ * 后台
+ */
+Route::get('admin/login', 'Admin\LoginController@login');//登录页面
+
+Route::get('/getCode', 'Admin\LoginController@getCode');//登录页面
+
+// Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
+
+	Route::get('admin/index', 'Admin\IndexController@index');//后台首页
+
+	Route::get('admin/info', 'Admin\IndexController@info');//首页的info页面
+// });	
