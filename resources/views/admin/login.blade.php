@@ -11,13 +11,15 @@
 		<h2>欢迎使用微博管理平台</h2>
 		<div class="form">
 			
-			<p style="color:red"></p>
+			@if(session('msg'))
+				<p style="color:red">{{session('msg')}}</p>
+			@endif
 			
-			<form action="" method="post">
-				
+			<form action="/doLogin" method="post">
+			{{csrf_field()}}	
 				<ul>
 					<li>
-					<input type="text" name="user_name" class="text"/>
+						<input type="text" name="user_name" class="text"/>
 						<span><i class="fa fa-user"></i></span>
 					</li>
 					<li>

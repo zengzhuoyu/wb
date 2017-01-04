@@ -22,7 +22,7 @@
 		<ul>
 			<li>管理员：admin</li>
 			<li><a href="pass.html" target="main">修改密码</a></li>
-			<li><a href="">退出</a></li>
+			<li><a href="/admin/loginOut" id="login_out">退出</a></li>
 		</ul>
 	</div>
 </div>
@@ -71,6 +71,19 @@
 	CopyRight © 2015. Powered By <a href="http://www.houdunwang.com">http://www.houdunwang.com</a>.
 </div>
 <!--底部 结束-->
+
+<script>
+	
+    //退出登录时确认框
+    $('#login_out').click(function () {
+        var isOut = confirm('退出登录？');
+        if (isOut) {
+            return true;
+        }
+        return false;
+    });
+
+</script>
 </body>
 </html>
 

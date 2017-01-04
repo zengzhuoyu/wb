@@ -9,13 +9,22 @@ use App\Http\Controllers\Controller;
 
 class IndexController extends Controller
 {
-    public function index(){
+	public function index(){
 
-    	return view('admin.index');
-    }
+		return view('admin.index');
+	}
 
-    public function info(){
+	public function info(){
 
-    	return view('admin.info');
-    }
+		return view('admin.info');
+	}
+
+	//退出
+	public function loginOut(){
+
+		session_unset();
+		session_destroy();		
+
+		return redirect('admin/login');
+	}	    
 }

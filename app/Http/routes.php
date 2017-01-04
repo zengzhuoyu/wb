@@ -253,11 +253,15 @@ Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
  */
 Route::get('admin/login', 'Admin\LoginController@login');//登录页面
 
-Route::get('/getCode', 'Admin\LoginController@getCode');//登录页面
+Route::get('getCode', 'Admin\LoginController@getCode');//登录页面 - 获取验证码
 
-// Route::group(['middleware'=>['home.login'],'namespace'=>'Home'],function(){
+Route::post('doLogin', 'Admin\LoginController@doLogin');//登录页面 - 登录操作
 
-	Route::get('admin/index', 'Admin\IndexController@index');//后台首页
+Route::group(['middleware'=>['admin.login'],'prefix'=>'admin','namespace'=>'Admin'],function(){
 
-	Route::get('admin/info', 'Admin\IndexController@info');//首页的info页面
-// });	
+	Route::get('index', 'IndexController@index');//后台首页
+
+	Route::get('info', 'IndexController@info');//首页的info页面
+
+	Route::get('loginOut', 'IndexController@loginOut');//后台首页 - 退出操作
+});	
