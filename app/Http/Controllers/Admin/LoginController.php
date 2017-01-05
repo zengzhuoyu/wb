@@ -63,8 +63,9 @@ class LoginController extends Controller
 	$_SESSION['uid'] = $admin->id;
 	$_SESSION['username'] = $admin->username;
 	$_SESSION['logintime'] = date('Y-m-d H:i', $admin->logintime);
-	$_SESSION['now'] = date('Y-m-d H:i', time());
+	$_SESSION['nowtime'] = date('Y-m-d H:i', time());
 	$_SESSION['loginip'] = $admin->loginip;
+	$_SESSION['nowip'] = $data['loginip'];
 	$_SESSION['admin'] = $admin->admin;
 
     	return redirect('admin/index');
