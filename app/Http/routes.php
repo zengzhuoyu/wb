@@ -264,4 +264,7 @@ Route::group(['middleware'=>['admin.login'],'prefix'=>'admin','namespace'=>'Admi
 	Route::get('info', 'IndexController@info');//首页的info页面
 
 	Route::get('loginOut', 'IndexController@loginOut');//后台首页 - 退出操作
+
+	//用户管理
+	Route::get('userIndex', 'UserController@index');//用户列表
 });	
