@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="/admin/font/css/font-awesome.min.css">
     <script type="text/javascript" src="/admin/js/jquery.js"></script>
     <script type="text/javascript" src="/admin/js/ch-ui.admin.js"></script>
-    <script type="text/javascript" src="/admin/js/layer.js"></script>
 </head>
 <body>
 		<!--头部 开始-->

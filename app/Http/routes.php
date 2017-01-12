@@ -267,4 +267,6 @@ Route::group(['middleware'=>['admin.login'],'prefix'=>'admin','namespace'=>'Admi
 
 	//用户管理
 	Route::get('userIndex', 'UserController@index');//用户列表
+
+	Route::post('lockUser', 'UserController@lockUser');//用户列表 - 异步锁定 | 解锁用户
 });	
